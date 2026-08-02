@@ -11,7 +11,7 @@ fail()
   exit 1
 }
 
-for file in .clang-format .editorconfig CODESTYLE.md; do
+for file in .clang-format .editorconfig CODESTYLE.md Doxyfile; do
   [ -s "$root/$file" ] || fail "$file is missing or empty"
 done
 

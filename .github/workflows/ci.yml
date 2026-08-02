@@ -76,6 +76,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends \
             clang \
+            clang-format \
+            doxygen \
             libarchive-dev \
             libssl-dev \
             mandoc \
@@ -130,6 +132,10 @@ jobs:
             -Dwerror=true
           meson compile -C build
           meson test -C build --print-errorlogs
+
+      - name: Qualify public API documentation
+        if: matrix.name == 'GCC shared'
+        run: doxygen Doxyfile
 
       - name: Qualify manuals
         if: matrix.man_pages == 'enabled'
