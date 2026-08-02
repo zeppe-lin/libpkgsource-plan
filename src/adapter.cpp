@@ -7,11 +7,10 @@
 
 #include <openssl/evp.h>
 
-#include <algorithm>
 #include <array>
 #include <cstdint>
+#include <limits>
 #include <memory>
-#include <sstream>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -40,9 +39,17 @@ public:
     update(bytes.data(), bytes.size());
   }
 
+  void sequence_size(std::size_t value)
+  {
+    if (value > std::numeric_limits<std::uint64_t>::max())
+      throw projection_error(projection_error_code::identity,
+                             "identity sequence exceeds canonical u64 length");
+    number(static_cast<std::uint64_t>(value));
+  }
+
   void text(std::string_view value)
   {
-    number(value.size());
+    sequence_size(value.size());
     update(value.data(), value.size());
   }
 
@@ -107,16 +114,16 @@ pkgplan::candidate_control_identity control_identity(
 {
   identity_writer writer;
   writer.text("libpkgsource-plan/candidate-control/v1");
-  writer.number(control.runtime_dependencies().size());
+  writer.sequence_size(control.runtime_dependencies().size());
   for (const auto& dependency : control.runtime_dependencies())
     writer.text(dependency.expression());
-  writer.number(control.removal_lifecycle().size());
+  writer.sequence_size(control.removal_lifecycle().size());
   for (const auto& lifecycle : control.removal_lifecycle()) {
     writer.number(static_cast<std::uint64_t>(lifecycle.phase()));
     writer.text(lifecycle.format());
     writer.text(lifecycle.material());
   }
-  writer.number(control.target_profile().size());
+  writer.sequence_size(control.target_profile().size());
   for (const auto& profile : control.target_profile()) {
     writer.text(profile.name());
     writer.text(profile.value());
@@ -207,8 +214,10 @@ candidate_projection project_candidate(pkgsource::source_snapshot source)
             parse_sha256(source_release.identity().hex())),
         source_release.package().name(), source_release.version(),
         std::to_string(source_release.release()));
+    const pkgplan::candidate_control_identity identity =
+        control_identity(control);
     pkgplan::candidate_package_fact candidate(
-        control_identity(control), std::move(release), std::move(control));
+        identity, std::move(release), std::move(control));
     return candidate_projection(std::move(source), std::move(candidate));
   } catch (const projection_error&) {
     throw;

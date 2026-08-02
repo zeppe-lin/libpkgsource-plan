@@ -99,6 +99,8 @@ void test_projection_content()
   assert(candidate.release().name() == "example");
   assert(candidate.release().version() == "1.0");
   assert(candidate.release().release() == "1");
+  assert(candidate.release().identity().string()
+         == "v1:sha256:" + projected.source().recipe().release().identity().hex());
 
   const auto& control = candidate.control_projection();
   assert(control.runtime_dependencies().size() == 1);
@@ -161,7 +163,10 @@ void test_projected_facts_change_candidate()
   release_options.version = "2.0";
   const auto release = plan_adapter::project_candidate(
       snapshot(std::move(release_options)));
-  assert(original.candidate().identity() != release.candidate().identity());
+  assert(original.candidate().identity() == release.candidate().identity());
+  assert(original.candidate().release().identity()
+         != release.candidate().release().identity());
+  assert(original.candidate() != release.candidate());
 }
 
 void test_unrestricted_target_architecture()
