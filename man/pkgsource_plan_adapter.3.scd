@@ -2,42 +2,61 @@ pkgsource_plan_adapter(3)
 
 # NAME
 
-pkgsource_plan_adapter - project sealed native source truth into libpkgplan
+pkgsource_plan_adapter - project sealed source authority into planner facts
 
 # SYNOPSIS
 
 *#include <libpkgsource-plan/adapter.h>*
 
-*pkgsource::plan_adapter::project_candidate(source)*
+*pkgsource::plan_adapter::candidate_projection*
+*pkgsource::plan_adapter::project_candidate(*
+*    pkgsource::source_snapshot source);*
 
 # DESCRIPTION
 
-*libpkgsource-plan* projects one sealed *source_snapshot* into a
-*pkgplan::candidate_package_fact* and retains the source snapshot beside the
-planner fact.
+*libpkgsource-plan* projects one complete *source_snapshot* into one
+*pkgplan::candidate_package_fact*.  The returned *candidate_projection* retains
+the source snapshot beside the planner fact.
 
 The projection contains exact run requirements, pre-remove and post-remove
-program bytes, normalized target-architecture requirements, package release
-coordinates, and source-issued package release identity.
+program bytes, normalized target architecture constraints, package release
+coordinates, and the source-issued package release identity.
 
-Build requirements, check requirements, lifecycle requirements, selected build
-profiles, build architecture requirements, installation lifecycle programs,
-source inputs, and the build program are not planner candidate control.
+Build and check requirements, action-bound lifecycle requirements, selected
+build profiles, profile closure, build architecture constraints, source inputs,
+build and check programs, and installation lifecycle programs do not cross the
+planner boundary.
 
 # IDENTITIES
 
-The source package-release SHA-256 identity is converted without reinterpretation
-to the corresponding planner identity domain.  Candidate-control identity is
-computed from planner-normalized control using the domain
-*libpkgsource-plan/candidate-control/v2*.
+The source package-release SHA-256 bytes are transferred into the corresponding
+planner release-identity value without reinterpretation.  Candidate-control
+identity is computed over planner-normalized runtime dependencies, removal
+lifecycle, and target-profile facts using
+*libpkgsource-plan/candidate-control/v1*.
 
-The complete source snapshot identity remains separate provenance.
+Changing an excluded source fact changes retained source identity but does not
+change the projected planner candidate.  Changing a projected fact changes the
+candidate identity.
 
 # ERRORS
 
-Projection failures throw *pkgsource::plan_adapter::projection_error*.
-*projection_error_code* distinguishes identity construction from planner fact
-rejection.
+Failures throw *pkgsource::plan_adapter::projection_error*.
+*projection_error_code::identity* reports digest construction failure.
+*projection_error_code::planner_fact* reports rejection while constructing
+planner values.
+
+# AUTHORITY
+
+The adapter does not parse source syntax, resolve requirements, choose package
+candidates, build transaction operations, execute lifecycle programs, or store
+evidence.  It translates only facts already owned by the two libraries.
+
+# ABI
+
+The first public ABI is *libpkgsource-plan.so.1*.  The library publicly depends
+on *libpkgsource* major API 3 and *libpkgplan* 0.2 or later, and privately uses
+libcrypto for candidate-control identity.
 
 # SEE ALSO
 
