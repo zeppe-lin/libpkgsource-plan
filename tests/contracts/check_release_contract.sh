@@ -52,6 +52,8 @@ fi
   fail 'generated roff manual is missing'
 [ -x "$root/tools/update-man-pages.sh" ] ||
   fail 'manual-page generator is missing or not executable'
+[ -s "$root/tools/canonicalize-man-roff.awk" ] ||
+  fail 'manual-page roff canonicalizer is missing or empty'
 grep -F "input: 'generated/pkgsource_plan_adapter.3'" \
   "$root/man/meson.build" >/dev/null ||
   fail 'ordinary builds do not install committed generated roff'
@@ -64,6 +66,13 @@ grep -F -- '--eol=lf' "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind LF output'
 grep -F -- '--wrap=none' "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind deterministic wrapping'
+grep -F -- '--no-highlight' "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not disable writer syntax highlighting'
+grep -F 'canonicalize-man-roff.awk' "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not canonicalize Pandoc writer output'
+grep -F 'Pandoc 3.1 through 3.x is required' \
+  "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not bind the qualified Pandoc major series'
 if grep -R -E 'scdoc|\.scd([^A-Za-z0-9_]|$)' \
     "$root/man" "$root/meson.options" \
     "$root/.github/workflows/ci.yml" >/dev/null; then

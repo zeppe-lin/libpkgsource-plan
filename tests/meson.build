@@ -135,6 +135,15 @@ if get_option('tests').enabled()
     ],
   )
 
+  test(
+    'manpage-normalizer',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'contracts/check_manpage_normalizer.sh'),
+      meson.project_source_root(),
+    ],
+  )
+
   pandoc = find_program('pandoc', required: false)
   if pandoc.found()
     test(
