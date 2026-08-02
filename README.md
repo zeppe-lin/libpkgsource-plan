@@ -25,6 +25,8 @@ operations, execute programs, or store evidence.
 ```cpp
 #include <libpkgsource-plan/libpkgsource-plan.h>
 
+#include <utility>
+
 auto projection =
     pkgsource::plan_adapter::project_candidate(std::move(snapshot));
 

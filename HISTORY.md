@@ -24,6 +24,7 @@ First independent source-to-planner projection release.
   standard exceptions retain their original type.
 - Published `libpkgsource` and `libpkgplan` exactly once as public pkg-config
   requirements and retained libcrypto as one private requirement.
+- Completed Doxygen namespace coverage and self-contained include ownership.
 - Added independent content, identity, exclusion, public-header, metadata,
   owner-boundary, documentation, style, and release contract tests.
 - Added Doxygen, scdoc, formatter, compiler, sanitizer, installed-consumer, ELF,

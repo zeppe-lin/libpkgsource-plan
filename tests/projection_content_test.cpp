@@ -5,6 +5,7 @@
 #include "source_fixture.h"
 #include "test_support.h"
 
+#include <cstddef>
 #include <string>
 #include <utility>
 

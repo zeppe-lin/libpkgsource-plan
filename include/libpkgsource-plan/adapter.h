@@ -13,6 +13,10 @@
 #include <stdexcept>
 #include <string>
 
+/**
+ * @namespace pkgsource::plan_adapter
+ * @brief Source-authority projection into planner-owned candidate facts.
+ */
 namespace pkgsource::plan_adapter {
 
 /** @brief Machine-readable category for a projection failure. */
