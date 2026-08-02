@@ -8,9 +8,9 @@ pkgsource_plan_adapter - project sealed source authority into planner facts
 
 *#include <libpkgsource-plan/adapter.h>*
 
-*pkgsource::plan_adapter::candidate_projection*
-*pkgsource::plan_adapter::project_candidate(*
-*    pkgsource::source_snapshot source);*
+*pkgsource::plan_adapter::candidate_projection*++
+*pkgsource::plan_adapter::project_candidate(* \
+    *pkgsource::source_snapshot source);*
 
 # DESCRIPTION
 
