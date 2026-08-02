@@ -48,6 +48,10 @@ grep -F "input: 'generated/pkgsource_plan_adapter.3'" \
 grep -F -- '--from=markdown-smart' \
   "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind the restricted Markdown reader'
+grep -F -- '--fail-if-warnings' "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not reject Pandoc warnings'
+grep -F -- '--eol=lf' "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not bind LF output'
 grep -F -- '--wrap=none' "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind deterministic wrapping'
 if grep -R -E 'scdoc|\.scd([^A-Za-z0-9_]|$)' \

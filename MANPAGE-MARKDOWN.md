@@ -110,6 +110,8 @@ The repository generator invokes Pandoc with:
 --from=markdown-smart
 --to=man
 --standalone
+--fail-if-warnings
+--eol=lf
 --wrap=none
 ```
 

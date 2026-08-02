@@ -57,6 +57,8 @@ trap 'rm -f "$raw" "$temporary"' EXIT HUP INT TERM
   --from=markdown-smart \
   --to=man \
   --standalone \
+  --fail-if-warnings \
+  --eol=lf \
   --wrap=none \
   "$source" > "$raw"
 
