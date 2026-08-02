@@ -16,15 +16,18 @@ API from reports, generated patches, or memory.
 
 Keep formatting, semantic code, tests, and documentation in separate commits
 when practical. Compute identity material before moving its source values. Use
-named protocol constants and explicit phase mappings.
+named protocol constants and explicit phase mappings. Keep cryptographic
+provider APIs and headers inside `src/internal`.
 
 Every projected field requires a positive behavioral test. Every excluded field
 requires an independent stability test. Package release must remain separate
 from candidate-control identity.
 
 Public API changes require Doxygen updates, canonical Markdown manual updates,
-regenerated roff, public-header consumer tests, and an ABI decision. Identity changes additionally require a
-new normative identity document and fixed vectors.
+regenerated roff, public-header consumer tests, and an ABI decision. Identity changes additionally require
+a new normative identity document and fixed vectors. A new SHA-256 provider
+requires provider vectors and the complete existing identity suite, but not a
+new identity version.
 
 ## Manual pages
 
@@ -35,6 +38,6 @@ restricted source profile is defined in `docs/manpage-markdown.md`.
 
 ## Acceptance
 
-Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but skip
-metadata, installed consumers, owner closure, manuals, documentation, or replay
+Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but
+skip metadata, installed consumers, owner closure, manuals, documentation, or replay
 are incomplete.

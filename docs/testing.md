@@ -1,64 +1,73 @@
 # Testing
 
-## Executable behavior
+## Projection behavior
 
 `projection-content` proves the exact owner facts that cross the boundary:
 package release, release identity, runtime dependencies, removal lifecycle, and
 target architecture control. It also proves wildcard handling and source-owner
 architecture ordering.
 
-`projection-identity` binds the published fixed vector. It varies each projected
-control group independently and proves that package release remains separate
-from candidate-control identity.
+`projection-identity` binds the published fixed vector through the public
+adapter. It varies each projected control group independently and proves that
+package release remains separate from candidate-control identity.
 
 `projection-exclusions` varies each excluded semantic fact independently. Every
 case must change source identity while leaving the planner candidate equal. A
-separate case proves that source origin is retained provenance but does not
-change source identity or planner control.
+separate case proves that source origin is retained provenance but not semantic
+identity.
 
-`public-umbrella` and `public-component` compile the two installed entry points
-in separate translation units and bind the public function type.
+## Internal identity behavior
+
+`sha256-provider` binds the selected provider to standard empty-input,
+incremental `abc`, and exact binary-input vectors.
+
+`candidate-control-identity` calls the private protocol encoder directly. It
+binds the published version-one vector and proves that encoding observes
+planner-normalized order rather than caller insertion order.
+
+`source-release-identity` proves that validated source SHA-256 bytes enter the
+planner package-release digest domain unchanged.
+
+These tests do not make private headers public. Meson links them against the
+non-installed private identity archive used by the shared library.
+
+## Public headers
+
+`public-umbrella` and `public-component` compile and execute consumers through
+the aggregate and component include paths. CI repeats the umbrella consumer
+after installation through generated pkg-config metadata.
 
 ## Repository contracts
 
-`owner-boundary` checks only surfaces that cannot be proved through behavior:
-public owner headers, direct dependency declarations, absence of YAML, codec,
-and image authority, retention of the complete source snapshot, and narrow
-translation of planner-owned validation failures.
+`owner-boundary` proves that parser, codec, image, and provider details do not
+cross the public adapter boundary. It also proves that OpenSSL appears only in
+the selected provider implementation.
 
-`metadata` parses generated pkg-config output. It requires exactly one public
-`libpkgsource` dependency, exactly one public `libpkgplan` dependency, and
-exactly one private `libcrypto` dependency.
+`metadata` requires `libpkgsource` and `libpkgplan` publicly exactly once and
+`libcrypto` privately exactly once for the current provider.
 
-`documentation-contract` checks required documents, structural sections, public
-include examples, and owner-boundary terminology without binding incidental
-prose.
+`abi-surface` verifies the shared-library version node, required public
+symbols, and absence of internal or standard-library exports.
 
-`style-contract` checks the repository style authority and Markdown rules.
-`manpage-source` checks the restricted manual-page Markdown profile, title,
-section order, and canonical synopsis. When Pandoc is available,
-`manpage-generated` regenerates the roff and rejects any difference from the
-committed release artifact.
-
-When `clang-format-17` is available, `format` checks every C++ source, header,
-and test against `.clang-format` and rejects a different formatter major.
-
-`release-contract` checks project version, SONAME generation, dependency floors,
-installed headers, pkg-config promotion, identity domain, fixed vector, and
-absence of unpublished identity or syntax generations.
+`release-contract`, `documentation-contract`, `style-contract`,
+`manpage-source`, `manpage-generated`, and `format` bind release metadata,
+knowledge layout, Markdown policy, generated roff, and mechanical C++ format.
 
 ## Release qualification
 
-Before tagging, run clean shared and static builds with GCC and Clang against
-the exact supported owner boundaries. Promote warnings to errors. Run ASan and
-UBSan. Generate Doxygen without warnings. Regenerate manual pages with Pandoc,
-require a clean generated diff, and lint the committed roff with mandoc. The
-ordinary build must install the committed roff without requiring Pandoc.
+The release matrix covers:
 
-Install each build into an empty prefix. Compile and run an external consumer
-through `pkg-config`; use `pkg-config --static` for the static closure. Inspect
-the shared object for the expected SONAME and direct `NEEDED` entries.
+- GCC and Clang;
+- separate shared and static builds;
+- warnings as errors;
+- GCC and Clang ASan/UBSan runs;
+- the complete owner-library closure;
+- all projection, internal identity, and public-header tests;
+- installed shared and static consumers through pkg-config;
+- SONAME and direct shared-library dependencies;
+- Doxygen, Pandoc regeneration, and mandoc lint;
+- repository contracts, `git diff --check`, `git fsck`, and independent
+  `git am` replay.
 
-Finally, run `git diff --check`, `git fsck`, and an independent `git am` replay.
-The replay tree, not an assumed commit identifier, is the reproducibility
-invariant.
+A provider is qualified only when the same matrix passes with that provider
+selected explicitly.

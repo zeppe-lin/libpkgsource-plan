@@ -2,59 +2,68 @@
 
 ## Purpose
 
-This repository treats readability as a correctness property. The code should
-make ownership, ordering, failure, and authority boundaries visible without
-requiring the reader to infer them from convention or historical context.
-
-The style is intentionally conservative. A future edit should be difficult to
-misread and difficult to make accidentally unsafe.
+The repository style exists to make authority transfer, protocol framing, and
+ownership movement reviewable. Formatting is automated; semantic clarity is a
+review obligation.
 
 ## C++ formatting
 
-C++ source and public headers are formatted by `.clang-format` with
-`clang-format 17`. The formatter major is pinned because layout is repository
-state, not a developer-local preference.
+`clang-format 17` and the repository `.clang-format` are canonical. CI runs the
+formatter in dry-run error mode over installed headers, implementation sources,
+and C++ tests.
 
-Control statements always use braces, including one-statement bodies. The
-braces are not decoration: they prevent comments, logging, or a second statement
-from silently changing control flow during maintenance.
+Control statements always use braces, including one-statement bodies. Braces
+must not be omitted to save vertical space. A later comment or statement must
+not be able to change control flow by indentation alone.
 
-Use two-space indentation, no tabs, and an 80-column target. Pointer and
-reference symbols bind to the type. Includes are grouped by authority: this
-library, local test support, owner libraries, implementation-only third-party
-libraries, then the C++ standard library. The formatter sorts names within
-each group.
+Includes are grouped in this order:
 
-Formatting changes should not be mixed with semantic changes unless the
-semantic edit necessarily rewrites the same lines.
+1. the corresponding public or private project header;
+2. other private project headers;
+3. owner-library headers;
+4. provider headers, only inside provider implementations;
+5. standard-library headers.
 
 ## C++ design
 
-Prefer explicit value ownership and RAII. Compute values before moving the
-objects from which they are derived. Give protocol constants and identity
-framing named declarations instead of repeating string or numeric literals.
+Public headers expose owner types and stable adapter types only. Provider types,
+implementation helpers, and protocol writers remain under `src/internal`.
 
-Use braces for every `if`, `for`, `while`, and `do` body. Avoid broad `using
-namespace` directives. Do not rely on argument-evaluation order, implicit
-narrowing, host-width serialization, or enum representation for durable
-identity material.
+A translation unit should have one dominant responsibility. `adapter.cpp`
+coordinates projection. Candidate-control framing, source digest import, and
+SHA-256 execution belong to separate internal units.
 
-Comments explain invariants, ownership, and non-obvious constraints. They do
-not narrate syntax. Public API comments use Doxygen and state inputs, ownership,
-return values, and failure behavior that the implementation actually provides.
-Do not claim thread safety, compatibility, validation, or persistence guarantees
-without executable or owner documentation that proves them.
+Compute identities before moving their source values. Never depend on function
+argument evaluation order or the contents of moved-from objects.
+
+Protocol constants use named values. Enum representations are never serialized
+implicitly. Canonical field order is documented beside the code that enforces
+it and in the normative protocol document.
+
+Catch only exceptions whose ownership is part of the boundary. Do not convert
+`std::exception` wholesale into a more specific domain error.
+
+## Comments and Doxygen
+
+Installed headers carry complete Doxygen for public types, parameters, return
+values, ownership, and exceptions. Public Doxygen is the API source of truth.
+
+Implementation comments explain facts that are not obvious from syntax:
+canonical ordering, owner normalization, protocol coupling, defensive branches,
+move timing, and exception translation. They do not narrate individual
+statements or repeat the public manual.
+
+Private headers may use concise Doxygen-style comments for IDE navigation, but
+they are not included in the published public API documentation.
 
 ## Tests
 
-A test name states one contract. Failure output identifies the contract that
-failed. Prefer behavioral tests over grepping implementation text. Static
-contract tests are reserved for repository boundaries that cannot be observed
-through the public API, such as dependency placement, installed headers, and
-forbidden adapter dependencies.
+Behavioral tests are organized by contract, not by implementation file.
+Projection tests use only the public API. Internal tests bind provider vectors
+and canonical identity framing directly.
 
 Shared fixtures expose semantic options rather than construction noise. Each
-excluded or projected fact is varied independently so one field cannot mask
+projected or excluded fact is varied independently so one field cannot mask
 another regression.
 
 ## Documentation
@@ -64,18 +73,18 @@ and horizontal rules are not used. Repository Markdown does not carry SPDX HTML
 comments; licensing authority is kept in `COPYING`, `COPYRIGHT`, and source-file
 headers where tooling consumes it.
 
-Documentation distinguishes owner facts, adapter behavior, and exclusions. It
-must not invent future orchestration, persistence, compatibility, or execution
-semantics.
+Documentation distinguishes owner facts, adapter behavior, implementation
+choices, and exclusions. It must not invent future orchestration, persistence,
+compatibility, or execution semantics.
 
-Manual pages use the restricted profile in `docs/manpage-markdown.md`. Markdown is
-the canonical source; committed roff is generated release material. Review both
-forms together and never edit generated roff directly.
+Manual pages use the restricted profile in `docs/manpage-markdown.md`. Markdown
+is the canonical source; committed roff is generated release material. Review
+both forms together and never edit generated roff directly.
 
 ## Review discipline
 
-Every patch should have one review purpose. Mechanical style, semantic code,
-tests, and documentation are separated when practical. A release candidate is
+Every patch should have one review purpose. Tree movement, semantic code, tests,
+and documentation are separated when practical. A release candidate is
 accepted only after clean shared and static builds, both supported compilers,
-sanitisers, generated metadata checks, installed-consumer checks, manual-page
+sanitizers, generated metadata checks, installed-consumer checks, manual-page
 lint, and exact patch replay.

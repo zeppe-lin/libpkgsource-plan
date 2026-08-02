@@ -32,8 +32,16 @@ First independent source-to-planner projection release.
   replay qualification policy.
 - Made Markdown the canonical manual source and committed generated roff so
   ordinary builds do not require Pandoc.
-- Established `docs/code-style.md`, `.clang-format`, and `.editorconfig` as the house
-  engineering baseline, with clang-format 17 pinned for reproducible layout.
+- Established `docs/code-style.md`, `.clang-format`, and `.editorconfig` as the
+  house engineering baseline, with clang-format 17 pinned for reproducible layout.
+- Organized project knowledge, tests, and private sources by authority and
+  review purpose.
+- Isolated candidate-control framing, source digest import, and SHA-256
+  execution from projection orchestration.
+- Established `sha256_provider` with OpenSSL as the first qualified private
+  provider and added direct provider and identity protocol tests.
+- Hid implementation symbols by default and published the intended C++ ABI
+  through the `LIBPKGSOURCE_PLAN_1.0` linker version node.
 
 ## Import boundary
 

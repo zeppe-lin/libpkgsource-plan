@@ -14,7 +14,7 @@ image, installed record, or complete `candidate_package_fact`.
 
 ## Primitive encoding
 
-The SHA-256 input is built from these primitives:
+The provider-independent SHA-256 input is built from these primitives:
 
 - `u64`: one unsigned 64-bit integer in network byte order;
 - `text`: `u64(byte length)` followed by the exact string bytes;
@@ -85,7 +85,8 @@ the canonical identity is:
 v1:sha256:2064db1e0c8a2934b1998aae9cd289cf4faace757dbc0f153afd017a85781795
 ```
 
-The projection identity test binds this vector to the implementation.
+The direct identity test and the public projection identity test bind this
+vector to the implementation.
 
 ## Evolution
 
@@ -93,5 +94,6 @@ A change to field participation, primitive framing, sequence order, phase
 codes, owner normalization assumptions, or the domain string changes identity
 semantics and requires a new identity version.
 
-A project version or SONAME change alone does not authorize changing this
-contract.
+A project version, SONAME change, or replacement of one conforming SHA-256
+provider with another does not authorize changing this contract. Replacing
+SHA-256 with another algorithm does.

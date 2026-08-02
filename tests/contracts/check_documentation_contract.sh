@@ -39,10 +39,14 @@ require_heading "$root/README.md" '## Projection'
 require_heading "$root/README.md" '## Public API'
 require_heading "$root/docs/architecture.md" '## Authority boundary'
 require_heading "$root/docs/architecture.md" '## Projection map'
+require_heading "$root/docs/architecture.md" '## Repository layout'
+require_heading "$root/docs/architecture.md" '## Projection pipeline'
+require_heading "$root/docs/architecture.md" '## SHA-256 provider boundary'
 require_heading "$root/docs/architecture.md" '## Excluded source authority'
 require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Canonical record'
 require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Fixed vector'
-require_heading "$root/docs/testing.md" '## Executable behavior'
+require_heading "$root/docs/testing.md" '## Projection behavior'
+require_heading "$root/docs/testing.md" '## Internal identity behavior'
 require_heading "$root/docs/testing.md" '## Release qualification'
 require_heading "$root/docs/manpage-markdown.md" '## Conversion contract'
 require_heading "$root/docs/manpage-markdown.md" '## Forbidden Markdown'
@@ -67,12 +71,19 @@ grep -F '2064db1e0c8a2934b1998aae9cd289cf' \
   "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||
   fail 'identity specification omits the fixed vector'
 
+for retired in DESIGN.md CODESTYLE.md TESTING.md MANPAGE-MARKDOWN.md \
+               CANDIDATE-CONTROL-IDENTITY-1.md MIGRATION.md
+do
+  [ ! -e "$root/$retired" ] ||
+    fail "retired root document remains: $retired"
+done
+
 if grep -R -E 'parse_(recipe|profiles)|seal_recipe_yaml|yaml_parser' \
-    "$root"/*.md "$root/man" >/dev/null; then
+    "$root"/*.md "$root/docs" "$root/man" >/dev/null; then
   fail 'source-syntax implementation appears in adapter documentation'
 fi
 
 if grep -R -E 'is thread[- ]safe|is lock[- ]free|is backward compatible' \
-    "$root"/*.md "$root/man" >/dev/null; then
+    "$root"/*.md "$root/docs" "$root/man" >/dev/null; then
   fail 'documentation claims an unqualified concurrency or compatibility rule'
 fi

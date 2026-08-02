@@ -70,8 +70,8 @@ The byte-level contract and fixed vector are specified in
 projection failures.
 
 `pkgsource::plan_adapter::projection_error_code::identity`
-: Identity framing, SHA-256 processing, or source release-identity decoding
-  failed.
+: Source release-identity import or candidate-control identity construction
+  failed. Provider diagnostics are retained in the exception message.
 
 `pkgsource::plan_adapter::projection_error_code::planner_fact`
 : A projected value raised `pkgplan::fact_error` while constructing a
@@ -86,9 +86,11 @@ store evidence.
 
 # ABI
 
-The public library is `libpkgsource-plan.so.1`. The public API depends on
-`libpkgsource` 3.0 or later and `libpkgplan` 0.2 or later. Libcrypto is a private
-implementation dependency used for candidate-control identity.
+The public library is `libpkgsource-plan.so.1`; its first symbol version is
+`LIBPKGSOURCE_PLAN_1.0`. The public API depends on
+`libpkgsource` 3.0 or later and `libpkgplan` 0.2 or later. The selected SHA-256 provider is a private implementation dependency. Version
+1.0.0 qualifies the OpenSSL provider, so generated metadata records libcrypto
+privately.
 
 # SEE ALSO
 

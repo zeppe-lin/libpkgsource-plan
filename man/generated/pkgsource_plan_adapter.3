@@ -42,12 +42,13 @@ The source package\-release SHA\-256 bytes are imported into the corresponding p
 Candidate\-control identity is computed over the constructed, planner\-normalized runtime dependencies, removal lifecycle, and target\-profile facts using the domain \f[CR]libpkgsource\-plan/candidate\-control/v1\f[R].
 Package release coordinates and source\-snapshot identity do not participate in candidate\-control identity.
 .PP
-The byte\-level contract and fixed vector are specified in \f[CR]CANDIDATE\-CONTROL\-IDENTITY\-1.md\f[R] in the source distribution.
+The byte\-level contract and fixed vector are specified in \f[CR]docs/protocols/candidate\-control\-identity\-v1.md\f[R] in the source distribution.
 .SH ERRORS
 \f[CR]pkgsource::plan_adapter::projection_error\f[R] is thrown for adapter\-owned projection failures.
 .TP
 \f[CR]pkgsource::plan_adapter::projection_error_code::identity\f[R]
-Identity framing, SHA\-256 processing, or source release\-identity decoding failed.
+Source release\-identity import or candidate\-control identity construction failed.
+Provider diagnostics are retained in the exception message.
 .TP
 \f[CR]pkgsource::plan_adapter::projection_error_code::planner_fact\f[R]
 A projected value raised \f[CR]pkgplan::fact_error\f[R] while constructing a \f[CR]libpkgplan\f[R] fact.
@@ -56,8 +57,9 @@ Other standard exceptions are not reclassified.
 The adapter translates only facts already owned by \f[CR]libpkgsource\f[R] and \f[CR]libpkgplan\f[R].
 It does not parse source documents, resolve requirements, choose package candidates, construct transaction operations, execute programs, or store evidence.
 .SH ABI
-The public library is \f[CR]libpkgsource\-plan.so.1\f[R].
+The public library is \f[CR]libpkgsource\-plan.so.1\f[R]; its first symbol version is \f[CR]LIBPKGSOURCE_PLAN_1.0\f[R].
 The public API depends on \f[CR]libpkgsource\f[R] 3.0 or later and \f[CR]libpkgplan\f[R] 0.2 or later.
-Libcrypto is a private implementation dependency used for candidate\-control identity.
+The selected SHA\-256 provider is a private implementation dependency.
+Version 1.0.0 qualifies the OpenSSL provider, so generated metadata records libcrypto privately.
 .SH SEE ALSO
 \f[CR]libpkgsource(3)\f[R], \f[CR]pkgsource_snapshot(3)\f[R], \f[CR]libpkgplan(3)\f[R]
