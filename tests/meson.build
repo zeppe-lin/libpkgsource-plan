@@ -128,6 +128,14 @@ if get_option('tests').enabled()
     ],
   )
   test(
+    'html-docs-contract',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'contracts/check_html_docs_contract.sh'),
+      meson.project_source_root(),
+    ],
+  )
+  test(
     'style-contract',
     sh,
     args: [
@@ -176,6 +184,22 @@ if get_option('tests').enabled()
         clang_format.full_path(),
         meson.project_source_root(),
       ],
+    )
+  endif
+
+  if html_docs_enabled
+    html_docs_checker = find_program(
+      meson.project_source_root() / 'tools/check-html-docs.py',
+    )
+    test(
+      'html-docs',
+      html_docs_checker,
+      args: [
+        html_docs_output_dir,
+        '--forbid-path', meson.project_source_root(),
+        '--forbid-path', meson.project_build_root(),
+      ],
+      depends: [html_docs_target],
     )
   endif
 endif

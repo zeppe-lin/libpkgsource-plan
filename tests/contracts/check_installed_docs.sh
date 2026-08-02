@@ -26,9 +26,12 @@ for file in \
   code-style.md \
   manpage-markdown.md \
   testing.md \
+  html.md \
   protocols/candidate-control-identity-v1.md \
   history/in-tree-adapter-migration.md \
-  man/pkgsource_plan_adapter.3.md
+  man/pkgsource_plan_adapter.3.md \
+  assets/house.css \
+  assets/doxygen-extra.css
 do
   [ -s "$docdir/$file" ] || fail "missing installed documentation: $file"
 done

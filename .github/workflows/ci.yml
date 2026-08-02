@@ -28,21 +28,25 @@ jobs:
             cxx: g++
             mode: shared
             man_pages: enabled
+            html_docs: enabled
           - name: GCC static
             cc: gcc
             cxx: g++
             mode: static
             man_pages: disabled
+            html_docs: disabled
           - name: Clang shared
             cc: clang
             cxx: clang++
             mode: shared
             man_pages: disabled
+            html_docs: disabled
           - name: Clang static
             cc: clang
             cxx: clang++
             mode: static
             man_pages: disabled
+            html_docs: disabled
     env:
       CC: ${{ matrix.cc }}
       CXX: ${{ matrix.cxx }}
@@ -130,6 +134,7 @@ jobs:
             -Ddefault_library=${{ matrix.mode }} \
             -Dlink_mode=${{ matrix.mode }} \
             -Dman_pages=${{ matrix.man_pages }} \
+            -Dhtml_docs=${{ matrix.html_docs }} \
             -Dsha256_provider=openssl \
             -Dwerror=true
           meson compile -C build
@@ -151,6 +156,10 @@ jobs:
           rm -rf "$stage"
           meson install -C build --destdir "$stage"
           tests/contracts/check_installed_docs.sh "$stage$PREFIX"
+          if [[ '${{ matrix.html_docs }}' == enabled ]]; then
+            tests/contracts/check_installed_html_docs.sh \
+              "$stage$PREFIX" 1.0.0
+          fi
 
       - name: Install
         run: meson install -C build
@@ -265,6 +274,7 @@ jobs:
             -Ddefault_library=shared \
             -Dlink_mode=shared \
             -Dman_pages=disabled \
+            -Dhtml_docs=disabled \
             -Dsha256_provider=openssl \
             -Db_sanitize=address,undefined \
             -Db_lundef=false \

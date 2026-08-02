@@ -73,6 +73,18 @@ grep -F "install_tag: 'doc'" "$root/docs/meson.build" >/dev/null ||
   fail 'canonical documentation install tag is missing'
 grep -F "install_tag: 'man'" "$root/docs/man/meson.build" >/dev/null ||
   fail 'manual install tag is missing'
+grep -F "'html_docs'" "$root/meson.options" >/dev/null ||
+  fail 'HTML documentation option is missing'
+grep -F "value: 'disabled'" "$root/meson.options" >/dev/null ||
+  fail 'HTML documentation is not disabled by default'
+grep -F "install_tag: 'html-docs'" "$root/docs/meson.build" >/dev/null ||
+  fail 'versioned HTML documentation install tag is missing'
+[ -x "$root/tools/build-html-docs.py" ] ||
+  fail 'HTML documentation builder is missing or not executable'
+[ -x "$root/tools/check-html-docs.py" ] ||
+  fail 'HTML documentation checker is missing or not executable'
+[ -x "$root/tools/install-html-docs.py" ] ||
+  fail 'HTML documentation installer is missing or not executable'
 grep -F -- '--from=markdown-smart' \
   "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind the restricted Markdown reader'
