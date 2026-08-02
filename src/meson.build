@@ -9,7 +9,7 @@ libpkgsource_plan = library(
   dependencies: [libpkgsource_dep, libpkgplan_dep, libcrypto_dep],
   install: true,
   version: meson.project_version(),
-  soversion: '0',
+  soversion: '1',
 )
 
 libpkgsource_plan_dep = declare_dependency(
@@ -30,6 +30,6 @@ pkgconf.generate(
   filebase: 'libpkgsource-plan',
   description: 'Native libpkgsource to libpkgplan candidate adapter',
   subdirs: '.',
-  requires: ['libpkgsource = 2.1.0', 'libpkgplan >= 0.2.0'],
+  requires: ['libpkgsource >= 3.0.0', 'libpkgplan >= 0.2.0'],
   requires_private: ['libcrypto'],
 )

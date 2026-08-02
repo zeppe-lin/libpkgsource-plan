@@ -106,7 +106,7 @@ pkgplan::candidate_control_identity control_identity(
     const pkgplan::candidate_control_projection& control)
 {
   identity_writer writer;
-  writer.text("libpkgsource-plan/candidate-control/v2");
+  writer.text("libpkgsource-plan/candidate-control/v1");
   writer.number(control.runtime_dependencies().size());
   for (const auto& dependency : control.runtime_dependencies())
     writer.text(dependency.expression());
