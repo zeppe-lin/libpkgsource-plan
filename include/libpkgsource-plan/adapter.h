@@ -46,6 +46,9 @@ public:
    */
   projection_error(projection_error_code code, std::string message);
 
+  /** @brief Destroy the typed projection failure. */
+  ~projection_error() override;
+
   /** @return The stable category supplied at construction. */
   [[nodiscard]] projection_error_code code() const noexcept;
 

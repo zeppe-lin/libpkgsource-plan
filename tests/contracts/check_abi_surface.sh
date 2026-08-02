@@ -19,6 +19,7 @@ demangled=$($nm_tool -D --defined-only -C "$library") ||
 
 for required in \
   'pkgsource::plan_adapter::projection_error::projection_error' \
+  'pkgsource::plan_adapter::projection_error::~projection_error' \
   'pkgsource::plan_adapter::projection_error::code() const' \
   'pkgsource::plan_adapter::candidate_projection::candidate_projection' \
   'pkgsource::plan_adapter::candidate_projection::source() const' \
