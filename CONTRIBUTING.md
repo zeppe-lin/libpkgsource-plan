@@ -22,9 +22,16 @@ Every projected field requires a positive behavioral test. Every excluded field
 requires an independent stability test. Package release must remain separate
 from candidate-control identity.
 
-Public API changes require Doxygen updates, manual-page updates, public-header
-consumer tests, and an ABI decision. Identity changes additionally require a
+Public API changes require Doxygen updates, canonical Markdown manual updates,
+regenerated roff, public-header consumer tests, and an ABI decision. Identity changes additionally require a
 new normative identity document and fixed vectors.
+
+## Manual pages
+
+Edit `man/*.md`, not `man/generated/*`. Run
+`tools/update-man-pages.sh --write`, review the generated roff in the same
+commit, and run `tools/update-man-pages.sh --check` before submission. The
+restricted source profile is defined in `MANPAGE-MARKDOWN.md`.
 
 ## Acceptance
 

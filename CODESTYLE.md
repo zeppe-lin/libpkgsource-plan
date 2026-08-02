@@ -68,6 +68,10 @@ Documentation distinguishes owner facts, adapter behavior, and exclusions. It
 must not invent future orchestration, persistence, compatibility, or execution
 semantics.
 
+Manual pages use the restricted profile in `MANPAGE-MARKDOWN.md`. Markdown is
+the canonical source; committed roff is generated release material. Review both
+forms together and never edit generated roff directly.
+
 ## Review discipline
 
 Every patch should have one review purpose. Mechanical style, semantic code,
