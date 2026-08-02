@@ -19,6 +19,17 @@ grep -F "version: '>=3.0.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgsource dependency floor is not 3.0.0'
 grep -F "version: '>=0.2.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgplan dependency floor is not 0.2.0'
+grep -F 'requires: [libpkgsource_dep, libpkgplan_dep]' \
+  "$root/src/meson.build" >/dev/null ||
+  fail 'public pkg-config dependencies are not promoted by dependency object'
+if grep -E '^[[:space:]]*requires_private:' \
+    "$root/src/meson.build" >/dev/null; then
+  fail 'private pkg-config closure is duplicated manually'
+fi
+if grep -E "^[[:space:]]*requires:.*'(libpkgsource|libpkgplan|libcrypto)" \
+    "$root/src/meson.build" >/dev/null; then
+  fail 'pkg-config owner dependencies use string requirements'
+fi
 grep -F 'libpkgsource-plan/candidate-control/v1' \
   "$root/src/adapter.cpp" >/dev/null ||
   fail 'first public control identity domain is not version one'

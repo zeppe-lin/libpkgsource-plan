@@ -6,27 +6,82 @@ build_root=$1
 project_version=$2
 metadata=$build_root/meson-private/libpkgsource-plan.pc
 [ -s "$metadata" ] || metadata=$(
-  find "$build_root" -type f -name libpkgsource-plan.pc -print | sed -n '1p'
+  find "$build_root" -type f -name libpkgsource-plan.pc -print |
+    sed -n '1p'
 )
 [ -n "${metadata:-}" ] && [ -s "$metadata" ] || {
   echo 'plan-metadata-test: generated metadata not found' >&2
   exit 1
 }
 
-grep -F 'Name: libpkgsource-plan' "$metadata" >/dev/null
-grep -F "Version: $project_version" "$metadata" >/dev/null
-for requirement in 'libpkgsource >= 3.0.0' 'libpkgplan >= 0.2.0'; do
-  count=$(grep '^Requires:' "$metadata" | grep -oF "$requirement" | wc -l)
-  [ "$count" -eq 1 ] || {
-    echo "plan-metadata-test: expected one '$requirement', found $count" >&2
-    cat "$metadata" >&2
-    exit 1
-  }
-done
-count=$(grep '^Requires.private:' "$metadata" | grep -oF 'libcrypto' | wc -l)
-[ "$count" -eq 1 ] || {
-  echo "plan-metadata-test: expected one private libcrypto, found $count" >&2
+fail()
+{
+  echo "plan-metadata-test: $*" >&2
   cat "$metadata" >&2
   exit 1
 }
-grep -E 'Libs:.*-lpkgsource-plan' "$metadata" >/dev/null
+
+field_count()
+{
+  field=$1
+  awk -v field="$field:" '
+    $1 == field { ++count }
+    END { print count + 0 }
+  ' "$metadata"
+}
+
+module_count()
+{
+  field=$1
+  module=$2
+  awk -v field="$field:" -v module="$module" '
+    $1 == field {
+      for (i = 2; i <= NF; ++i) {
+        token = $i
+        sub(/,$/, "", token)
+        if (token == module) ++count
+      }
+    }
+    END { print count + 0 }
+  ' "$metadata"
+}
+
+expect_count()
+{
+  field=$1
+  module=$2
+  expected=$3
+  actual=$(module_count "$field" "$module")
+  [ "$actual" -eq "$expected" ] ||
+    fail "expected $module $expected time(s) in $field, found $actual"
+}
+
+grep -F 'Name: libpkgsource-plan' "$metadata" >/dev/null ||
+  fail 'module name is missing'
+grep -F "Version: $project_version" "$metadata" >/dev/null ||
+  fail "module version is not $project_version"
+
+[ "$(field_count Requires)" -eq 1 ] ||
+  fail 'expected exactly one Requires field'
+[ "$(field_count Requires.private)" -eq 1 ] ||
+  fail 'expected exactly one Requires.private field'
+
+expect_count Requires libpkgsource 1
+expect_count Requires libpkgplan 1
+expect_count Requires libcrypto 0
+expect_count Requires.private libpkgsource 0
+expect_count Requires.private libpkgplan 0
+expect_count Requires.private libcrypto 1
+
+grep -E \
+  'Requires:.*libpkgsource[[:space:]]*>=[[:space:]]*3\.0\.0' \
+  "$metadata" >/dev/null ||
+  fail 'public libpkgsource floor is not 3.0.0'
+grep -E \
+  'Requires:.*libpkgplan[[:space:]]*>=[[:space:]]*0\.2\.0' \
+  "$metadata" >/dev/null ||
+  fail 'public libpkgplan floor is not 0.2.0'
+grep -E 'Requires\.private:.*libcrypto' "$metadata" >/dev/null ||
+  fail 'private libcrypto requirement is missing'
+grep -E 'Libs:.*-lpkgsource-plan' "$metadata" >/dev/null ||
+  fail 'library linker flag is missing'
