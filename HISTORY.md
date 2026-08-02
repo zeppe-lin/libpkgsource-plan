@@ -1,6 +1,6 @@
 # History
 
-## 1.0.0 — unreleased
+## 1.0.0
 
 First independent source-to-planner projection release.
 
