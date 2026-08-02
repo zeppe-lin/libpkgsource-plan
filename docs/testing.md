@@ -50,10 +50,11 @@ the selected provider implementation.
 `abi/libpkgsource-plan.exports`. It also rejects internal, standard-library, and
 premature named symbol-version exports.
 
-`release-contract`, `documentation-contract`, `style-contract`,
+`release-contract`, `documentation-contract`, `documentation-install-contract`, `style-contract`,
 `manpage-source`, `manpage-normalizer`, `manpage-generated`, and `format` bind
-release metadata, knowledge layout, Markdown policy, Pandoc 3.x writer
-normalization, generated roff, and mechanical C++ format.
+release metadata, knowledge layout, explicit documentation installation,
+Markdown policy, Pandoc 3.x writer normalization, generated roff, and mechanical
+C++ format. `installed-docs` validates the staged `DESTDIR` tree.
 
 ## Release qualification
 

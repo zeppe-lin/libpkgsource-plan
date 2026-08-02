@@ -50,3 +50,11 @@ The umbrella header is the normal consumer entry point. The component header
 - `docs/manpage-markdown.md` defines the restricted Markdown-to-man profile.
 - `docs/history/in-tree-adapter-migration.md` records the split from the
   pre-release in-tree adapter.
+
+
+## Installed documentation
+
+Canonical project documentation is installed under
+`share/doc/libpkgsource-plan`. The generated manual remains in the normal
+`share/man/man3` hierarchy. Both layouts honor the configured prefix and
+`DESTDIR` staging.

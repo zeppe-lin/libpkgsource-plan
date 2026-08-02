@@ -42,5 +42,5 @@ commit converter-only churn caused by an equivalent writer spelling.
 ## Acceptance
 
 Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but
-skip metadata, installed consumers, owner closure, manuals, documentation, or replay
-are incomplete.
+skip metadata, installed consumers, owner closure, manuals, staged documentation
+installation, or replay are incomplete.

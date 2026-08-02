@@ -66,6 +66,13 @@ fi
 grep -F "input: 'generated/pkgsource_plan_adapter.3'" \
   "$root/docs/man/meson.build" >/dev/null ||
   fail 'ordinary builds do not install committed generated roff'
+grep -F "get_option('datadir') / 'doc' / meson.project_name()" \
+  "$root/docs/meson.build" >/dev/null ||
+  fail 'canonical documentation install root is not declared'
+grep -F "install_tag: 'doc'" "$root/docs/meson.build" >/dev/null ||
+  fail 'canonical documentation install tag is missing'
+grep -F "install_tag: 'man'" "$root/docs/man/meson.build" >/dev/null ||
+  fail 'manual install tag is missing'
 grep -F -- '--from=markdown-smart' \
   "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind the restricted Markdown reader'

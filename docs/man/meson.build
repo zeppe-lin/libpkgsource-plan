@@ -7,6 +7,7 @@ if not get_option('man_pages').disabled()
     copy: true,
     install: true,
     install_dir: get_option('mandir') / 'man3',
+    install_tag: 'man',
   )
 endif
 

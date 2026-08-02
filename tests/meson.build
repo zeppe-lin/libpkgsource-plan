@@ -120,6 +120,14 @@ if get_option('tests').enabled()
     ],
   )
   test(
+    'documentation-install-contract',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'contracts/check_documentation_install_contract.sh'),
+      meson.project_source_root(),
+    ],
+  )
+  test(
     'style-contract',
     sh,
     args: [

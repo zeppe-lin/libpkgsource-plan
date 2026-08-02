@@ -43,6 +43,18 @@ Files under `src/internal` and `tests/internal` are not installed and are not
 public API. Root-level README, HISTORY, CONTRIBUTING, MAINTAINING, COPYING, and
 COPYRIGHT remain conventional project entry points.
 
+
+## Installed documentation
+
+The source tree and install tree preserve the same authority split. Canonical
+Markdown, policy, history, and license files install under
+`share/doc/libpkgsource-plan`. Derived roff installs under `share/man/man3` and
+is not duplicated into the canonical documentation tree.
+
+Documentation installation uses explicit file lists. A new document is not
+published merely because it appears somewhere under `docs`; admission requires
+a reviewed Meson entry and an installed-layout test update.
+
 ## Public interface
 
 The complete API is exposed through

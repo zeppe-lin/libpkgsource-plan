@@ -143,6 +143,15 @@ jobs:
         if: matrix.man_pages == 'enabled'
         run: find build/docs/man -type f -name '*.3' -exec mandoc -Tlint {} +
 
+      - name: Qualify staged documentation install
+        shell: bash
+        run: |
+          set -euo pipefail
+          stage="$RUNNER_TEMP/stage"
+          rm -rf "$stage"
+          meson install -C build --destdir "$stage"
+          tests/contracts/check_installed_docs.sh "$stage$PREFIX"
+
       - name: Install
         run: meson install -C build
 

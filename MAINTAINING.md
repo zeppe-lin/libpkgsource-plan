@@ -35,7 +35,8 @@ provider fallback.
 2. Run formatter and Doxygen checks.
 3. Run GCC and Clang shared/static builds with warnings as errors for every
    admitted SHA-256 provider.
-4. Run sanitizers, generated metadata, installed consumers, and static closure.
+4. Run sanitizers, generated metadata, installed consumers, static closure,
+   and a staged `DESTDIR` documentation install.
 5. Compare the complete dynamic symbol table with the reviewed ELF manifest,
    inspect the SONAME and direct shared-library dependencies, and reject a named
    symbol-version node unless a concrete compatibility policy requires one.

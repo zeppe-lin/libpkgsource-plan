@@ -34,6 +34,8 @@ First independent source-to-planner projection release.
   ordinary builds do not require Pandoc.
 - Canonicalized equivalent Pandoc 3.x code-block and bullet output so generated
   roff remains stable across qualified writer releases.
+- Installed canonical project documentation under `share/doc/libpkgsource-plan`
+  with explicit `doc` and `man` installation tags and staged-layout tests.
 - Established `docs/code-style.md`, `.clang-format`, and `.editorconfig` as the
   house engineering baseline, with clang-format 17 pinned for reproducible layout.
 - Organized project knowledge, tests, and private sources by authority and
