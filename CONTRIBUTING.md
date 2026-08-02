@@ -24,7 +24,8 @@ requires an independent stability test. Package release must remain separate
 from candidate-control identity.
 
 Public API changes require Doxygen updates, canonical Markdown manual updates,
-regenerated roff, public-header consumer tests, and an ABI decision. Identity changes additionally require
+regenerated roff, public-header consumer tests, the exact ELF export manifest,
+and an ABI decision. Identity changes additionally require
 a new normative identity document and fixed vectors. A new SHA-256 provider
 requires provider vectors and the complete existing identity suite, but not a
 new identity version.

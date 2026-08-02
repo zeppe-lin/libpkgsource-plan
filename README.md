@@ -45,6 +45,7 @@ The umbrella header is the normal consumer entry point. The component header
   framing.
 - `docs/testing.md` maps public, internal, and repository tests to their
   contracts.
+- `docs/abi.md` defines the reviewed ELF export boundary.
 - `docs/code-style.md` defines the repository engineering standard.
 - `docs/manpage-markdown.md` defines the restricted Markdown-to-man profile.
 - `docs/history/in-tree-adapter-migration.md` records the split from the

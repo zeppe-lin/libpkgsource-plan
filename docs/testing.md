@@ -46,8 +46,9 @@ the selected provider implementation.
 `metadata` requires `libpkgsource` and `libpkgplan` publicly exactly once and
 `libcrypto` privately exactly once for the current provider.
 
-`abi-surface` verifies the shared-library version node, required public
-symbols, and absence of internal or standard-library exports.
+`abi-surface` compares the complete shared-library dynamic symbol table with
+`abi/libpkgsource-plan.exports`. It also rejects internal, standard-library, and
+premature named symbol-version exports.
 
 `release-contract`, `documentation-contract`, `style-contract`,
 `manpage-source`, `manpage-normalizer`, `manpage-generated`, and `format` bind

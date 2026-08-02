@@ -36,8 +36,9 @@ provider fallback.
 3. Run GCC and Clang shared/static builds with warnings as errors for every
    admitted SHA-256 provider.
 4. Run sanitizers, generated metadata, installed consumers, and static closure.
-5. Inspect SONAME, ABI version node, exported symbols, and direct
-   shared-library dependencies.
+5. Compare the complete dynamic symbol table with the reviewed ELF manifest,
+   inspect the SONAME and direct shared-library dependencies, and reject a named
+   symbol-version node unless a concrete compatibility policy requires one.
 6. Regenerate manuals with a supported Pandoc 3.x release, run the writer
    canonicalization fixture, verify a clean generated diff, and lint the
    committed roff with mandoc. Review a new Pandoc major before admitting it.

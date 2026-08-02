@@ -81,6 +81,7 @@ if get_option('tests').enabled()
         join_paths(meson.current_source_dir(), 'contracts/check_abi_surface.sh'),
         nm.full_path(),
         libpkgsource_plan.full_path(),
+        meson.project_source_root() / 'abi/libpkgsource-plan.exports',
       ],
     )
   endif

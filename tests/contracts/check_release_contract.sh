@@ -24,6 +24,15 @@ grep -F "'../include/libpkgsource-plan/export.h'" \
 grep -F "gnu_symbol_visibility: 'hidden'" \
   "$root/src/meson.build" >/dev/null ||
   fail 'shared-library implementation is not hidden by default'
+[ -s "$root/abi/libpkgsource-plan.exports" ] ||
+  fail 'reviewed ELF ABI manifest is missing'
+[ -x "$root/tools/generate-elf-export-script.sh" ] ||
+  fail 'ELF export-script generator is missing or not executable'
+grep -F "input: '../abi/libpkgsource-plan.exports'" \
+  "$root/src/meson.build" >/dev/null ||
+  fail 'Meson does not generate export control from the ABI manifest'
+[ ! -e "$root/src/libpkgsource-plan.map" ] ||
+  fail 'retired wildcard ABI map remains in the source tree'
 grep -F '#include <libpkgsource-plan/adapter.h>' \
   "$root/include/libpkgsource-plan/libpkgsource-plan.h" >/dev/null ||
   fail 'umbrella header does not expose the complete adapter API'

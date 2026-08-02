@@ -42,8 +42,10 @@ First independent source-to-planner projection release.
   execution from projection orchestration.
 - Established `sha256_provider` with OpenSSL as the first qualified private
   provider and added direct provider and identity protocol tests.
-- Hid implementation symbols by default and published the intended C++ ABI
-  through the `LIBPKGSOURCE_PLAN_1.0` linker version node.
+- Hid implementation symbols by default and bound the exact GNU/Linux C++ ABI
+  through a reviewed symbol manifest and generated anonymous linker script.
+- Removed the premature named symbol-version node and namespace-wide export
+  wildcard before the first release.
 
 ## Import boundary
 

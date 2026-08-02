@@ -27,7 +27,9 @@ include/libpkgsource-plan/   installed public API
 src/adapter.cpp              source-to-plan orchestration
 src/internal/                private identity and digest implementation
 docs/man/                    canonical Markdown and generated roff
+docs/abi.md                 ELF export and SONAME policy
 docs/protocols/              normative identity protocols
+abi/                         reviewed dynamic-symbol manifest
 docs/history/                retained migration provenance
 tests/projection/            public behavioral contracts
 tests/internal/              private identity and provider contracts
@@ -54,7 +56,8 @@ fact.
 
 Public Doxygen belongs in installed headers. Implementation files document
 internal invariants, ordering, ownership transfer, and error translation
-without duplicating the public contract.
+without duplicating the public contract. The exact GNU/Linux dynamic symbol set
+is reviewed separately in `abi/libpkgsource-plan.exports`.
 
 ## Projection pipeline
 

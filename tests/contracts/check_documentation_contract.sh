@@ -22,6 +22,7 @@ require_heading()
 for document in \
   README.md \
   docs/architecture.md \
+  docs/abi.md \
   docs/protocols/candidate-control-identity-v1.md \
   docs/testing.md \
   docs/code-style.md \
@@ -38,6 +39,9 @@ require_heading "$root/README.md" '# libpkgsource-plan'
 require_heading "$root/README.md" '## Projection'
 require_heading "$root/README.md" '## Public API'
 require_heading "$root/docs/architecture.md" '## Authority boundary'
+require_heading "$root/docs/abi.md" '## Canonical manifest'
+require_heading "$root/docs/abi.md" '## Versioning'
+require_heading "$root/docs/abi.md" '## Qualification'
 require_heading "$root/docs/architecture.md" '## Projection map'
 require_heading "$root/docs/architecture.md" '## Repository layout'
 require_heading "$root/docs/architecture.md" '## Projection pipeline'

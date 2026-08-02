@@ -29,13 +29,20 @@ adapter_dependencies = [
   libpkgplan_dep,
 ] + sha256_provider_dependencies
 
-library_link_args = []
-library_link_depends = []
-if library_kind == 'shared'
-  abi_map = join_paths(meson.current_source_dir(), 'libpkgsource-plan.map')
-  library_link_args += ['-Wl,--version-script=' + abi_map]
-  library_link_depends += files('libpkgsource-plan.map')
-endif
+elf_export_generator = find_program(
+  meson.project_source_root() / 'tools/generate-elf-export-script.sh',
+)
+elf_export_script = configure_file(
+  input: '../abi/libpkgsource-plan.exports',
+  output: 'libpkgsource-plan.exports.map',
+  command: [elf_export_generator, '@INPUT@'],
+  capture: true,
+)
+
+library_link_args = [
+  '-Wl,--version-script=' + elf_export_script.full_path(),
+]
+library_link_depends = [elf_export_script]
 
 identity_sources = files(
   'internal/candidate_control_identity.cpp',
