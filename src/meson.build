@@ -20,6 +20,7 @@ libpkgsource_plan_dep = declare_dependency(
 meson.override_dependency('libpkgsource-plan', libpkgsource_plan_dep)
 
 install_headers(
+  '../include/libpkgsource-plan/libpkgsource-plan.h',
   '../include/libpkgsource-plan/adapter.h',
   subdir: 'libpkgsource-plan',
 )
