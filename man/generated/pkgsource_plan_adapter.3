@@ -1,0 +1,63 @@
+.\" Generated from man/pkgsource_plan_adapter.3.md; do not edit.
+.\"
+.TH "PKGSOURCE_PLAN_ADAPTER" "3" "" "libpkgsource\-plan 1.0.0" "libpkgsource\-plan"
+.SH NAME
+pkgsource_plan_adapter \- project sealed source authority into planner facts
+.SH SYNOPSIS
+.IP
+.EX
+#include <libpkgsource\-plan/libpkgsource\-plan.h>
+
+pkgsource::plan_adapter::candidate_projection
+pkgsource::plan_adapter::project_candidate(
+    pkgsource::source_snapshot source);
+.EE
+.SH DESCRIPTION
+\f[CR]project_candidate()\f[R] consumes one complete sealed \f[CR]pkgsource::source_snapshot\f[R] and returns a \f[CR]pkgsource::plan_adapter::candidate_projection\f[R] containing both the original source authority and one \f[CR]pkgplan::candidate_package_fact\f[R] derived from it.
+.PP
+The planner fact contains:
+.IP \[bu] 2
+each normalized runtime package requirement as one planner runtime dependency;
+.IP \[bu] 2
+pre\-remove and post\-remove programs as exact removal\-lifecycle material with format \f[CR]text/x\-posix\-shell\f[R];
+.IP \[bu] 2
+the normalized target architecture set as the target\-profile fact \f[CR]pkgsource.target\-architectures\f[R];
+.IP \[bu] 2
+package name, version, distribution release, and the source\-issued package release identity.
+.PP
+An empty target architecture set is represented by \f[CR]*\f[R].
+A constrained set is a comma\-separated sequence in the normalized order supplied by \f[CR]libpkgsource\f[R].
+.PP
+Build and check requirements, lifecycle requirements, selected profiles, build architecture constraints, source inputs, build and check programs, pre\-install and post\-install programs, source origin, and source\-snapshot identity do not become planner candidate control.
+They remain available through the retained source snapshot.
+.SH OWNERSHIP
+The input snapshot is taken by value.
+The returned \f[CR]pkgsource::plan_adapter::candidate_projection\f[R] owns that snapshot and the projected planner fact.
+Passing an rvalue transfers the snapshot without an additional copy.
+.PP
+The adapter does not reopen source paths or mutate the snapshot.
+.SH IDENTITIES
+The source package\-release SHA\-256 bytes are imported into the corresponding planner release\-identity value without recomputation.
+.PP
+Candidate\-control identity is computed over the constructed, planner\-normalized runtime dependencies, removal lifecycle, and target\-profile facts using the domain \f[CR]libpkgsource\-plan/candidate\-control/v1\f[R].
+Package release coordinates and source\-snapshot identity do not participate in candidate\-control identity.
+.PP
+The byte\-level contract and fixed vector are specified in \f[CR]CANDIDATE\-CONTROL\-IDENTITY\-1.md\f[R] in the source distribution.
+.SH ERRORS
+\f[CR]pkgsource::plan_adapter::projection_error\f[R] is thrown for adapter\-owned projection failures.
+.TP
+\f[CR]pkgsource::plan_adapter::projection_error_code::identity\f[R]
+Identity framing, SHA\-256 processing, or source release\-identity decoding failed.
+.TP
+\f[CR]pkgsource::plan_adapter::projection_error_code::planner_fact\f[R]
+A projected value raised \f[CR]pkgplan::fact_error\f[R] while constructing a \f[CR]libpkgplan\f[R] fact.
+Other standard exceptions are not reclassified.
+.SH AUTHORITY
+The adapter translates only facts already owned by \f[CR]libpkgsource\f[R] and \f[CR]libpkgplan\f[R].
+It does not parse source documents, resolve requirements, choose package candidates, construct transaction operations, execute programs, or store evidence.
+.SH ABI
+The public library is \f[CR]libpkgsource\-plan.so.1\f[R].
+The public API depends on \f[CR]libpkgsource\f[R] 3.0 or later and \f[CR]libpkgplan\f[R] 0.2 or later.
+Libcrypto is a private implementation dependency used for candidate\-control identity.
+.SH SEE ALSO
+\f[CR]libpkgsource(3)\f[R], \f[CR]pkgsource_snapshot(3)\f[R], \f[CR]libpkgplan(3)\f[R]
