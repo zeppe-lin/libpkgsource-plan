@@ -38,7 +38,7 @@ snapshot. No source-syntax value or recipe-format generation crosses the API.
 The unpublished in-tree candidate-control domain has no compatibility status.
 The first public contract is
 `libpkgsource-plan/candidate-control/v1`, specified in
-`CANDIDATE-CONTROL-IDENTITY-1.md`.
+`docs/protocols/candidate-control-identity-v1.md`.
 
 Existing pre-release candidate identities must not be imported as installed or
 persistent evidence.

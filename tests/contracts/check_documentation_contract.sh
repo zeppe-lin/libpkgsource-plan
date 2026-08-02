@@ -21,12 +21,12 @@ require_heading()
 
 for document in \
   README.md \
-  DESIGN.md \
-  CANDIDATE-CONTROL-IDENTITY-1.md \
-  TESTING.md \
-  CODESTYLE.md \
-  MANPAGE-MARKDOWN.md \
-  MIGRATION.md \
+  docs/architecture.md \
+  docs/protocols/candidate-control-identity-v1.md \
+  docs/testing.md \
+  docs/code-style.md \
+  docs/manpage-markdown.md \
+  docs/history/in-tree-adapter-migration.md \
   CONTRIBUTING.md \
   MAINTAINING.md \
   HISTORY.md
@@ -37,22 +37,22 @@ done
 require_heading "$root/README.md" '# libpkgsource-plan'
 require_heading "$root/README.md" '## Projection'
 require_heading "$root/README.md" '## Public API'
-require_heading "$root/DESIGN.md" '## Authority boundary'
-require_heading "$root/DESIGN.md" '## Projection map'
-require_heading "$root/DESIGN.md" '## Excluded source authority'
-require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Canonical record'
-require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Fixed vector'
-require_heading "$root/TESTING.md" '## Executable behavior'
-require_heading "$root/TESTING.md" '## Release qualification'
-require_heading "$root/MANPAGE-MARKDOWN.md" '## Conversion contract'
-require_heading "$root/MANPAGE-MARKDOWN.md" '## Forbidden Markdown'
-require_heading "$root/MIGRATION.md" '## No compatibility layer'
+require_heading "$root/docs/architecture.md" '## Authority boundary'
+require_heading "$root/docs/architecture.md" '## Projection map'
+require_heading "$root/docs/architecture.md" '## Excluded source authority'
+require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Canonical record'
+require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Fixed vector'
+require_heading "$root/docs/testing.md" '## Executable behavior'
+require_heading "$root/docs/testing.md" '## Release qualification'
+require_heading "$root/docs/manpage-markdown.md" '## Conversion contract'
+require_heading "$root/docs/manpage-markdown.md" '## Forbidden Markdown'
+require_heading "$root/docs/history/in-tree-adapter-migration.md" '## No compatibility layer'
 require_heading "$root/CONTRIBUTING.md" '## Boundary first'
 require_heading "$root/MAINTAINING.md" '## Release checklist'
 require_heading "$root/HISTORY.md" '## 1.0.0'
 
-for file in "$root/README.md" "$root/DESIGN.md" \
-            "$root/MIGRATION.md" "$root/man/pkgsource_plan_adapter.3.md"; do
+for file in "$root/README.md" "$root/docs/architecture.md" \
+            "$root/docs/history/in-tree-adapter-migration.md" "$root/man/pkgsource_plan_adapter.3.md"; do
   grep -F '<libpkgsource-plan/libpkgsource-plan.h>' "$file" >/dev/null ||
     fail "${file#$root/} omits the umbrella include"
 done
@@ -64,7 +64,7 @@ for section in '# DESCRIPTION' '# OWNERSHIP' '# IDENTITIES' '# ERRORS' \
 done
 
 grep -F '2064db1e0c8a2934b1998aae9cd289cf' \
-  "$root/CANDIDATE-CONTROL-IDENTITY-1.md" >/dev/null ||
+  "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||
   fail 'identity specification omits the fixed vector'
 
 if grep -R -E 'parse_(recipe|profiles)|seal_recipe_yaml|yaml_parser' \

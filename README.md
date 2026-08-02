@@ -39,9 +39,9 @@ The umbrella header is the normal consumer entry point. The component header
 
 ## Contracts
 
-- `DESIGN.md` defines ownership and projection boundaries.
-- `CANDIDATE-CONTROL-IDENTITY-1.md` defines the durable identity framing.
-- `TESTING.md` maps each test to the contract it proves.
-- `CODESTYLE.md` defines the repository engineering standard.
-- `MANPAGE-MARKDOWN.md` defines the restricted Markdown-to-man profile.
-- `MIGRATION.md` records the split from the pre-release in-tree adapter.
+- `docs/architecture.md` defines ownership and projection boundaries.
+- `docs/protocols/candidate-control-identity-v1.md` defines the durable identity framing.
+- `docs/testing.md` maps each test to the contract it proves.
+- `docs/code-style.md` defines the repository engineering standard.
+- `docs/manpage-markdown.md` defines the restricted Markdown-to-man profile.
+- `docs/history/in-tree-adapter-migration.md` records the split from the pre-release in-tree adapter.

@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <libpkgsource-plan/libpkgsource-plan.h>
 
-#include "source_fixture.h"
-#include "test_support.h"
+#include "../support/source_fixture.h"
+#include "../support/test_support.h"
 
 #include <cstddef>
 #include <string>

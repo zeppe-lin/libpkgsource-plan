@@ -3,7 +3,7 @@
 if get_option('tests').enabled()
   projection_content_test = executable(
     'projection-content-test',
-    'projection_content_test.cpp',
+    'projection/content_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
@@ -11,7 +11,7 @@ if get_option('tests').enabled()
 
   projection_identity_test = executable(
     'projection-identity-test',
-    'projection_identity_test.cpp',
+    'projection/identity_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
@@ -19,7 +19,7 @@ if get_option('tests').enabled()
 
   projection_exclusions_test = executable(
     'projection-exclusions-test',
-    'projection_exclusions_test.cpp',
+    'projection/exclusions_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
@@ -27,7 +27,7 @@ if get_option('tests').enabled()
 
   public_umbrella = executable(
     'public-umbrella',
-    'plan_umbrella_header_test.cpp',
+    'public/umbrella_header_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
@@ -35,7 +35,7 @@ if get_option('tests').enabled()
 
   public_component = executable(
     'public-component',
-    'plan_adapter_header_test.cpp',
+    'public/adapter_header_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
@@ -46,7 +46,7 @@ if get_option('tests').enabled()
     'owner-boundary',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_owner_boundary.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/check_owner_boundary.sh'),
       meson.project_source_root(),
     ],
   )
@@ -54,7 +54,7 @@ if get_option('tests').enabled()
     'release-contract',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_release_contract.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/check_release_contract.sh'),
       meson.project_source_root(),
     ],
   )
@@ -62,7 +62,7 @@ if get_option('tests').enabled()
     'metadata',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'metadata_test.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/metadata_test.sh'),
       meson.project_build_root(),
       meson.project_version(),
     ],
@@ -71,7 +71,7 @@ if get_option('tests').enabled()
     'documentation-contract',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_documentation_contract.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/check_documentation_contract.sh'),
       meson.project_source_root(),
     ],
   )
@@ -79,7 +79,7 @@ if get_option('tests').enabled()
     'style-contract',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_style_contract.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/check_style_contract.sh'),
       meson.project_source_root(),
     ],
   )
@@ -87,7 +87,7 @@ if get_option('tests').enabled()
     'manpage-source',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_manpage_source.sh'),
+      join_paths(meson.current_source_dir(), 'contracts/check_manpage_source.sh'),
       meson.project_source_root(),
     ],
   )
@@ -98,7 +98,7 @@ if get_option('tests').enabled()
       'manpage-generated',
       sh,
       args: [
-        join_paths(meson.current_source_dir(), 'check_manpage_generated.sh'),
+        join_paths(meson.current_source_dir(), 'contracts/check_manpage_generated.sh'),
         meson.project_source_root(),
         pandoc.full_path(),
       ],
@@ -111,7 +111,7 @@ if get_option('tests').enabled()
       'format',
       sh,
       args: [
-        join_paths(meson.current_source_dir(), 'check_format.sh'),
+        join_paths(meson.current_source_dir(), 'contracts/check_format.sh'),
         clang_format.full_path(),
         meson.project_source_root(),
       ],

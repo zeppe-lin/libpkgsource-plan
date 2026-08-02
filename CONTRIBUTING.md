@@ -31,10 +31,10 @@ new normative identity document and fixed vectors.
 Edit `man/*.md`, not `man/generated/*`. Run
 `tools/update-man-pages.sh --write`, review the generated roff in the same
 commit, and run `tools/update-man-pages.sh --check` before submission. The
-restricted source profile is defined in `MANPAGE-MARKDOWN.md`.
+restricted source profile is defined in `docs/manpage-markdown.md`.
 
 ## Acceptance
 
-Run the matrix in `TESTING.md`. Patches that pass only the adapter test but skip
+Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but skip
 metadata, installed consumers, owner closure, manuals, documentation, or replay
 are incomplete.

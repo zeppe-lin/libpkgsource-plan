@@ -62,7 +62,7 @@ coordinates and source-snapshot identity do not participate in
 candidate-control identity.
 
 The byte-level contract and fixed vector are specified in
-`CANDIDATE-CONTROL-IDENTITY-1.md` in the source distribution.
+`docs/protocols/candidate-control-identity-v1.md` in the source distribution.
 
 # ERRORS
 

@@ -155,7 +155,7 @@ jobs:
           pkg-config "${flags[@]}" --cflags --libs libpkgsource-plan \
             | tee installed.flags
           "$CXX" -std=c++17 -Wall -Wextra -Wpedantic -Werror \
-            tests/plan_umbrella_header_test.cpp \
+            tests/public/umbrella_header_test.cpp \
             $(pkg-config "${flags[@]}" --cflags --libs libpkgsource-plan) \
             -o installed-consumer
           ./installed-consumer

@@ -63,10 +63,10 @@ grep -F 'libpkgsource-plan/candidate-control/v1' \
   "$root/src/adapter.cpp" >/dev/null ||
   fail 'first public control identity domain is not version one'
 grep -F 'libpkgsource-plan/candidate-control/v1' \
-  "$root/CANDIDATE-CONTROL-IDENTITY-1.md" >/dev/null ||
+  "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||
   fail 'candidate-control identity specification is missing'
 grep -F '2064db1e0c8a2934b1998aae9cd289cf4faace757dbc0f153afd017a85781795' \
-  "$root/CANDIDATE-CONTROL-IDENTITY-1.md" >/dev/null ||
+  "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||
   fail 'candidate-control fixed vector is missing'
 if grep -R -E 'candidate-control/v2|source_syntax|recipe_yaml_v[0-9]' \
     "$root" --exclude-dir=.git --exclude='check_release_contract.sh' >/dev/null; then

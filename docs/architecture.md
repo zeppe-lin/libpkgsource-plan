@@ -51,7 +51,7 @@ digest.
 
 The adapter owns the canonical digest material. `libpkgplan` owns the typed
 `candidate_control_identity` and the candidate fact that carries it. The exact
-byte framing is specified in `CANDIDATE-CONTROL-IDENTITY-1.md`.
+byte framing is specified in `docs/protocols/candidate-control-identity-v1.md`.
 
 Protocol phase codes are mapped explicitly. The digest does not depend on the
 compiler representation or underlying numeric values of a C++ enum.
