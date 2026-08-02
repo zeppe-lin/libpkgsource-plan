@@ -1,13 +1,29 @@
 # SPDX-FileCopyrightText: 2026 Alexandr Savca
 # SPDX-License-Identifier: GPL-3.0-or-later
 if get_option('tests').enabled()
-  adapter_test = executable(
-    'adapter-test',
-    'plan_adapter_test.cpp',
+  projection_content_test = executable(
+    'projection-content-test',
+    'projection_content_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('adapter', adapter_test)
+  test('projection-content', projection_content_test)
+
+  projection_identity_test = executable(
+    'projection-identity-test',
+    'projection_identity_test.cpp',
+    dependencies: libpkgsource_plan_dep,
+    install: false,
+  )
+  test('projection-identity', projection_identity_test)
+
+  projection_exclusions_test = executable(
+    'projection-exclusions-test',
+    'projection_exclusions_test.cpp',
+    dependencies: libpkgsource_plan_dep,
+    install: false,
+  )
+  test('projection-exclusions', projection_exclusions_test)
 
   public_umbrella = executable(
     'public-umbrella',
@@ -27,10 +43,10 @@ if get_option('tests').enabled()
 
   sh = find_program('sh')
   test(
-    'projection-boundary',
+    'owner-boundary',
     sh,
     args: [
-      join_paths(meson.current_source_dir(), 'check_projection_boundary.sh'),
+      join_paths(meson.current_source_dir(), 'check_owner_boundary.sh'),
       meson.project_source_root(),
     ],
   )
