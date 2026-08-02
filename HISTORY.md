@@ -36,6 +36,9 @@ First independent source-to-planner projection release.
   roff remains stable across qualified writer releases.
 - Installed canonical project documentation under `share/doc/libpkgsource-plan`
   with explicit `doc` and `man` installation tags and staged-layout tests.
+- Added an explicitly enabled Pandoc and Doxygen HTML artifact under
+  `share/htmldocs/libpkgsource-plan/1.0.0`, with local-link, path-hygiene, and
+  `DESTDIR` installation checks.
 - Established `docs/code-style.md`, `.clang-format`, and `.editorconfig` as the
   house engineering baseline, with clang-format 17 pinned for reproducible layout.
 - Organized project knowledge, tests, and private sources by authority and

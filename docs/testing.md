@@ -50,11 +50,14 @@ the selected provider implementation.
 `abi/libpkgsource-plan.exports`. It also rejects internal, standard-library, and
 premature named symbol-version exports.
 
-`release-contract`, `documentation-contract`, `documentation-install-contract`, `style-contract`,
+`release-contract`, `documentation-contract`, `documentation-install-contract`,
+`html-docs-contract`, `style-contract`,
 `manpage-source`, `manpage-normalizer`, `manpage-generated`, and `format` bind
 release metadata, knowledge layout, explicit documentation installation,
 Markdown policy, Pandoc 3.x writer normalization, generated roff, and mechanical
-C++ format. `installed-docs` validates the staged `DESTDIR` tree.
+C++ format. `installed-docs` validates the staged canonical documentation
+tree. `html-docs` validates the rendered tree and local links;
+`installed-html-docs` validates its versioned `DESTDIR` installation.
 
 ## Release qualification
 
@@ -68,7 +71,8 @@ The release matrix covers:
 - all projection, internal identity, and public-header tests;
 - installed shared and static consumers through pkg-config;
 - SONAME and direct shared-library dependencies;
-- Doxygen, Pandoc regeneration, and mandoc lint;
+- Doxygen API HTML, project Markdown HTML, Pandoc man-page regeneration, and
+  mandoc lint;
 - repository contracts, `git diff --check`, `git fsck`, and independent
   `git am` replay.
 

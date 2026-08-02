@@ -48,9 +48,9 @@ The umbrella header is the normal consumer entry point. The component header
 - `docs/abi.md` defines the reviewed ELF export boundary.
 - `docs/code-style.md` defines the repository engineering standard.
 - `docs/manpage-markdown.md` defines the restricted Markdown-to-man profile.
+- `docs/html.md` defines the versioned static HTML artifact.
 - `docs/history/in-tree-adapter-migration.md` records the split from the
   pre-release in-tree adapter.
-
 
 ## Installed documentation
 
@@ -58,3 +58,10 @@ Canonical project documentation is installed under
 `share/doc/libpkgsource-plan`. The generated manual remains in the normal
 `share/man/man3` hierarchy. Both layouts honor the configured prefix and
 `DESTDIR` staging.
+
+## HTML documentation
+
+Set `-Dhtml_docs=enabled` to generate a self-contained documentation tree from
+project Markdown and public Doxygen declarations. The versioned artifact installs
+under `share/htmldocs/libpkgsource-plan/1.0.0` and is suitable for direct static
+publication.

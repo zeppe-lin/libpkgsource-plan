@@ -31,6 +31,7 @@ docs/abi.md                 ELF export and SONAME policy
 docs/protocols/              normative identity protocols
 abi/                         reviewed dynamic-symbol manifest
 docs/history/                retained migration provenance
+docs/assets/                 project-owned HTML presentation assets
 tests/projection/            public behavioral contracts
 tests/internal/              private identity and provider contracts
 tests/public/                installed-header contracts
@@ -43,7 +44,6 @@ Files under `src/internal` and `tests/internal` are not installed and are not
 public API. Root-level README, HISTORY, CONTRIBUTING, MAINTAINING, COPYING, and
 COPYRIGHT remain conventional project entry points.
 
-
 ## Installed documentation
 
 The source tree and install tree preserve the same authority split. Canonical
@@ -54,6 +54,18 @@ is not duplicated into the canonical documentation tree.
 Documentation installation uses explicit file lists. A new document is not
 published merely because it appears somewhere under `docs`; admission requires
 a reviewed Meson entry and an installed-layout test update.
+
+## HTML publication boundary
+
+The HTML builder consumes canonical Markdown, public headers, legal files, and
+project-owned styles. Pandoc and Doxygen emit one versioned tree under the build
+directory. The tree is checked for complete expected outputs, broken local
+links, source-only Markdown links, and leaked absolute build or source paths.
+
+The installed artifact lives under
+`share/htmldocs/libpkgsource-plan/<version>`. A website may publish that tree as
+opaque static content. It does not become a second documentation authority and
+must not be edited independently of the repository sources.
 
 ## Public interface
 

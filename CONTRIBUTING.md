@@ -39,6 +39,13 @@ restricted source and Pandoc 3.x compatibility profile is defined in
 `docs/manpage-markdown.md`. Do not bypass the project roff canonicalizer or
 commit converter-only churn caused by an equivalent writer spelling.
 
+## HTML documentation
+
+Changes to canonical Markdown, public Doxygen, HTML source assets, or output
+layout must pass the `html-docs` build and local-link checker. Generated HTML is
+not committed. Review the versioned build artifact before changing site-facing
+structure or presentation.
+
 ## Acceptance
 
 Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but

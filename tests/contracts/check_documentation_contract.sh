@@ -27,6 +27,7 @@ for document in \
   docs/testing.md \
   docs/code-style.md \
   docs/manpage-markdown.md \
+  docs/html.md \
   docs/history/in-tree-adapter-migration.md \
   CONTRIBUTING.md \
   MAINTAINING.md \
@@ -39,12 +40,14 @@ require_heading "$root/README.md" '# libpkgsource-plan'
 require_heading "$root/README.md" '## Projection'
 require_heading "$root/README.md" '## Public API'
 require_heading "$root/README.md" '## Installed documentation'
+require_heading "$root/README.md" '## HTML documentation'
 require_heading "$root/docs/architecture.md" '## Authority boundary'
 require_heading "$root/docs/abi.md" '## Canonical manifest'
 require_heading "$root/docs/abi.md" '## Versioning'
 require_heading "$root/docs/abi.md" '## Qualification'
 require_heading "$root/docs/architecture.md" '## Projection map'
 require_heading "$root/docs/architecture.md" '## Installed documentation'
+require_heading "$root/docs/architecture.md" '## HTML publication boundary'
 require_heading "$root/docs/architecture.md" '## Repository layout'
 require_heading "$root/docs/architecture.md" '## Projection pipeline'
 require_heading "$root/docs/architecture.md" '## SHA-256 provider boundary'
@@ -56,6 +59,9 @@ require_heading "$root/docs/testing.md" '## Internal identity behavior'
 require_heading "$root/docs/testing.md" '## Release qualification'
 require_heading "$root/docs/manpage-markdown.md" '## Conversion contract'
 require_heading "$root/docs/manpage-markdown.md" '## Forbidden Markdown'
+require_heading "$root/docs/html.md" '## Output layout'
+require_heading "$root/docs/html.md" '## Installation'
+require_heading "$root/docs/html.md" '## Site publication'
 require_heading "$root/docs/history/in-tree-adapter-migration.md" '## No compatibility layer'
 require_heading "$root/CONTRIBUTING.md" '## Boundary first'
 require_heading "$root/MAINTAINING.md" '## Release checklist'

@@ -43,7 +43,9 @@ provider fallback.
 6. Regenerate manuals with a supported Pandoc 3.x release, run the writer
    canonicalization fixture, verify a clean generated diff, and lint the
    committed roff with mandoc. Review a new Pandoc major before admitting it.
-7. Run repository contracts, `git diff --check`, and `git fsck`.
-8. Replay the patch series independently and compare final trees.
+7. Build the versioned HTML artifact, validate local links and path hygiene,
+   stage it through `DESTDIR`, and inspect the publication tree.
+8. Run repository contracts, `git diff --check`, and `git fsck`.
+9. Replay the patch series independently and compare final trees.
 
 Do not tag a tree with skipped or inferred qualification results.
