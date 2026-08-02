@@ -43,4 +43,12 @@ if get_option('tests').enabled()
       meson.project_version(),
     ],
   )
+  test(
+    'documentation-contract',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'check_documentation_contract.sh'),
+      meson.project_source_root(),
+    ],
+  )
 endif

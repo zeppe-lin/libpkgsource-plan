@@ -15,8 +15,10 @@ First independent source-to-planner projection release.
   target architectures, package release facts, and release identity.
 - Added tests proving that included facts change candidate identity, excluded
   source facts do not, and complete source provenance remains retained.
-- Added projection-boundary, release-metadata, public-header, shared/static,
-  sanitizer, and manual qualification contracts.
+- Added projection-boundary, release-metadata, public-header, and
+  documentation contract tests.
+- Published the required shared/static, compiler, sanitizer, installed-consumer,
+  ELF, and manual qualification matrix without claiming it before execution.
 
 ## Import boundary
 
