@@ -27,8 +27,15 @@ adapter.
    release identity into the corresponding planner release value.
 
 The adapter computes candidate-control identity over the planner-normalized
-projection using the domain `libpkgsource-plan/candidate-control/v1`. The final
-planner candidate identity remains owned by `libpkgplan`.
+control projection using the domain
+`libpkgsource-plan/candidate-control/v1`. `libpkgplan` owns the typed identity
+and the candidate fact that binds it to one package release; this adapter owns
+the canonical control material. The exact framing is specified in
+`CANDIDATE-CONTROL-IDENTITY-1.md`.
+
+Package release coordinates and release identity cross the boundary, but they
+do not participate in candidate-control identity. They are the separate release
+fact bound by `pkgplan::candidate_package_fact`.
 
 ## Excluded facts
 
@@ -47,9 +54,11 @@ Those facts may affect source authority, resolution, build, checking, lifecycle
 execution, or evidence storage, but they are not candidate control representable
 or owned by the current `libpkgplan` API.
 
-Changing an excluded fact changes the retained source snapshot identity but must
-not change the projected planner candidate. Changing a projected fact must
-change planner candidate identity.
+Changing an excluded semantic fact may change the retained source snapshot
+identity but must not change the projected planner candidate. Changing runtime
+dependencies, removal lifecycle, or target-profile facts must change
+candidate-control identity. Changing the package release must change the
+candidate fact while leaving an otherwise identical control identity unchanged.
 
 ## Provenance retention
 

@@ -35,9 +35,13 @@ identity is computed over planner-normalized runtime dependencies, removal
 lifecycle, and target-profile facts using
 *libpkgsource-plan/candidate-control/v1*.
 
-Changing an excluded source fact changes retained source identity but does not
-change the projected planner candidate.  Changing a projected fact changes the
-candidate identity.
+Changing runtime dependencies, removal lifecycle, or target architecture
+control changes candidate-control identity.  Changing package release changes
+the bound candidate fact but not an otherwise identical control identity.
+Changing an excluded source fact does not change the projected candidate.
+
+The byte-level version-one contract and fixed vector are published in
+*CANDIDATE-CONTROL-IDENTITY-1.md*.
 
 # ERRORS
 

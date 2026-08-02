@@ -13,8 +13,12 @@ First independent source-to-planner projection release.
   `libpkgsource-plan/candidate-control/v1` contract.
 - Preserved the narrow projection of run requirements, removal lifecycle,
   target architectures, package release facts, and release identity.
-- Added tests proving that included facts change candidate identity, excluded
-  source facts do not, and complete source provenance remains retained.
+- Fixed control identity construction so normalized control is hashed before
+  ownership is transferred into the planner fact.
+- Added a normative candidate-control identity specification and fixed vector.
+- Added tests proving that projected control changes control identity, package
+  release changes only the bound release fact, excluded source facts do not
+  cross the boundary, and complete source provenance remains retained.
 - Added projection-boundary, release-metadata, public-header, and
   documentation contract tests.
 - Published the required shared/static, compiler, sanitizer, installed-consumer,

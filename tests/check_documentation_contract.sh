@@ -16,12 +16,13 @@ require()
     fail "${file#$root/} omits: $text"
 }
 
-for file in README.md DESIGN.md TESTING.md MIGRATION.md CONTRIBUTING.md MAINTAINING.md HISTORY.md; do
+for file in README.md DESIGN.md TESTING.md MIGRATION.md CONTRIBUTING.md MAINTAINING.md HISTORY.md CANDIDATE-CONTROL-IDENTITY-1.md; do
   [ -s "$root/$file" ] || fail "$file is missing or empty"
 done
 
 require "$root/README.md" 'narrow composition adapter'
 require "$root/DESIGN.md" 'Excluded facts'
+require "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '2064db1e0c8a2934b1998aae9cd289cf'
 require "$root/TESTING.md" 'Required release matrix'
 require "$root/MIGRATION.md" 'No compatibility layer'
 require "$root/CONTRIBUTING.md" 'Every intentionally excluded source'

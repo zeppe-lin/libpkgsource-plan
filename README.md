@@ -25,5 +25,6 @@ const auto& source = projection.source();
 ```
 
 The adapter does not parse documents, resolve requirements, select packages,
-construct transaction operations, or store evidence. See `DESIGN.md` and
-`TESTING.md` for the exact projection contract.
+construct transaction operations, or store evidence. Candidate-control identity
+is specified byte-for-byte in `CANDIDATE-CONTROL-IDENTITY-1.md`; see `DESIGN.md`
+and `TESTING.md` for the full projection contract.

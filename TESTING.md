@@ -12,11 +12,15 @@ The adapter test proves:
 - pre-remove and post-remove program bytes become durable removal lifecycle;
 - target architectures become one normalized target-profile fact;
 - an unrestricted target architecture set becomes `*`;
-- changes to runtime dependencies, removal programs, target architectures, or
-  package release change planner candidate identity;
-- changes to check programs, build requirements, build architectures, or
-  installation lifecycle change source identity but not planner candidate
-  identity.
+- changes to runtime dependencies, removal programs, or target architectures
+  change candidate-control identity;
+- a package-release change changes the candidate fact and release identity but
+  not an otherwise identical candidate-control identity;
+- changes to metadata, source inputs, build and check requirements, selected
+  build profiles, lifecycle requirements, build and check programs, build
+  architectures, or installation lifecycle change source identity but not the
+  projected planner candidate;
+- the published candidate-control fixed vector remains byte-for-byte stable.
 
 ## Boundary contracts
 
@@ -31,8 +35,8 @@ snapshot to remain part of `candidate_projection`.
 requirement.
 
 `release-contract` validates project version, SONAME generation, dependency
-floors, the first public control-identity domain, and absence of pre-release
-syntax/identity generations.
+floors, the first public control-identity domain, the normative identity
+specification, and absence of pre-release syntax/identity generations.
 
 ## Required release matrix
 
