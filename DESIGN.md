@@ -94,3 +94,13 @@ Libcrypto is a private implementation dependency used only for
 candidate-control SHA-256 construction.
 
 The first public shared-library ABI is `libpkgsource-plan.so.1`.
+
+## Documentation pipeline
+
+Manual-page semantics are maintained in restricted Markdown. Pandoc is a
+maintainer regeneration tool, not an ordinary build dependency. The repository
+commits generated `man(7)` roff, Meson installs that artifact, and CI proves that
+regeneration is clean before mandoc lints the installed representation.
+
+This keeps one reviewable prose source while making package builds independent
+of the document compiler.

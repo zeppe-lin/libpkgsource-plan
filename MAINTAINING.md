@@ -25,7 +25,8 @@ first establishes the corresponding owner fact.
 3. Run GCC and Clang shared/static builds with warnings as errors.
 4. Run sanitizers, generated metadata, installed consumers, and static closure.
 5. Inspect SONAME and direct shared-library dependencies.
-6. Render and lint manuals.
+6. Regenerate manuals with Pandoc, verify a clean generated diff, and lint the
+   committed roff with mandoc.
 7. Run repository contracts, `git diff --check`, and `git fsck`.
 8. Replay the patch series independently and compare final trees.
 

@@ -43,4 +43,5 @@ The umbrella header is the normal consumer entry point. The component header
 - `CANDIDATE-CONTROL-IDENTITY-1.md` defines the durable identity framing.
 - `TESTING.md` maps each test to the contract it proves.
 - `CODESTYLE.md` defines the repository engineering standard.
+- `MANPAGE-MARKDOWN.md` defines the restricted Markdown-to-man profile.
 - `MIGRATION.md` records the split from the pre-release in-tree adapter.

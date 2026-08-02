@@ -27,8 +27,11 @@ First independent source-to-planner projection release.
 - Completed Doxygen namespace coverage and self-contained include ownership.
 - Added independent content, identity, exclusion, public-header, metadata,
   owner-boundary, documentation, style, and release contract tests.
-- Added Doxygen, scdoc, formatter, compiler, sanitizer, installed-consumer, ELF,
-  static-closure, and replay qualification policy.
+- Added Doxygen, restricted Markdown/Pandoc manual generation, mandoc lint,
+  formatter, compiler, sanitizer, installed-consumer, ELF, static-closure, and
+  replay qualification policy.
+- Made Markdown the canonical manual source and committed generated roff so
+  ordinary builds do not require Pandoc.
 - Established `CODESTYLE.md`, `.clang-format`, and `.editorconfig` as the house
   engineering baseline, with clang-format 17 pinned for reproducible layout.
 

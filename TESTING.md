@@ -35,6 +35,11 @@ include examples, and owner-boundary terminology without binding incidental
 prose.
 
 `style-contract` checks the repository style authority and Markdown rules.
+`manpage-source` checks the restricted manual-page Markdown profile, title,
+section order, and canonical synopsis. When Pandoc is available,
+`manpage-generated` regenerates the roff and rejects any difference from the
+committed release artifact.
+
 When `clang-format-17` is available, `format` checks every C++ source, header,
 and test against `.clang-format` and rejects a different formatter major.
 
@@ -46,8 +51,9 @@ absence of unpublished identity or syntax generations.
 
 Before tagging, run clean shared and static builds with GCC and Clang against
 the exact supported owner boundaries. Promote warnings to errors. Run ASan and
-UBSan. Generate Doxygen without warnings. Render the scdoc manual and lint it
-with mandoc.
+UBSan. Generate Doxygen without warnings. Regenerate manual pages with Pandoc,
+require a clean generated diff, and lint the committed roff with mandoc. The
+ordinary build must install the committed roff without requiring Pandoc.
 
 Install each build into an empty prefix. Compile and run an external consumer
 through `pkg-config`; use `pkg-config --static` for the static closure. Inspect
