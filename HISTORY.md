@@ -4,6 +4,9 @@
 
 First independent source-to-planner projection release.
 
+- Published `libpkgsource` and `libpkgplan` as public pkg-config requirements
+  exactly once while retaining `libcrypto` as a private implementation
+  dependency.
 - Extracted the planner adapter, public header, manual, and tests from the
   pre-release `libpkgsource 2.1.0` repository through a reviewable import
   commit.

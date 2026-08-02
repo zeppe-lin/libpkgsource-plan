@@ -30,6 +30,8 @@ pkgconf.generate(
   filebase: 'libpkgsource-plan',
   description: 'Native libpkgsource to libpkgplan candidate adapter',
   subdirs: '.',
-  requires: ['libpkgsource >= 3.0.0', 'libpkgplan >= 0.2.0'],
-  requires_private: ['libcrypto'],
+  # The target contributes its full closure as private requirements. Promote
+  # public API owners with their dependency objects so Meson de-duplicates
+  # them from that closure. libcrypto remains private and appears once.
+  requires: [libpkgsource_dep, libpkgplan_dep],
 )
