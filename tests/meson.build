@@ -83,4 +83,17 @@ if get_option('tests').enabled()
       meson.project_source_root(),
     ],
   )
+
+  clang_format = find_program('clang-format', required: false)
+  if clang_format.found()
+    test(
+      'format',
+      sh,
+      args: [
+        join_paths(meson.current_source_dir(), 'check_format.sh'),
+        clang_format.full_path(),
+        meson.project_source_root(),
+      ],
+    )
+  endif
 endif

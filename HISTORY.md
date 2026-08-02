@@ -4,33 +4,33 @@
 
 First independent source-to-planner projection release.
 
-- Added `<libpkgsource-plan/libpkgsource-plan.h>` as the complete public
-  umbrella header while retaining the precise adapter component header.
-- Published `libpkgsource` and `libpkgplan` as public pkg-config requirements
-  exactly once while retaining `libcrypto` as a private implementation
-  dependency.
-- Extracted the planner adapter, public header, manual, and tests from the
-  pre-release `libpkgsource 2.1.0` repository through a reviewable import
-  commit.
-- Rebased the adapter on the parser-neutral `libpkgsource 3.0.0` source model
-  and removed the obsolete source-syntax generation argument.
-- Reset the unpublished candidate-control identity domain to the first public
-  `libpkgsource-plan/candidate-control/v1` contract.
-- Preserved the narrow projection of run requirements, removal lifecycle,
-  target architectures, package release facts, and release identity.
-- Fixed control identity construction so normalized control is hashed before
-  ownership is transferred into the planner fact.
-- Added a normative candidate-control identity specification and fixed vector.
-- Added tests proving that projected control changes control identity, package
-  release changes only the bound release fact, excluded source facts do not
-  cross the boundary, and complete source provenance remains retained.
-- Added projection-boundary, release-metadata, public-header, and
-  documentation contract tests.
-- Published the required shared/static, compiler, sanitizer, installed-consumer,
-  ELF, and manual qualification matrix without claiming it before execution.
+- Extracted the adapter from the pre-release `libpkgsource 2.1.0` tree through a
+  reviewable provenance commit.
+- Rebased the projection on parser-neutral `libpkgsource 3.0.0` authority and
+  `libpkgplan 0.2.0` candidate facts.
+- Published `<libpkgsource-plan/libpkgsource-plan.h>` as the umbrella header and
+  retained `<libpkgsource-plan/adapter.h>` as the component header.
+- Projected normalized runtime package requirements, removal lifecycle, target
+  architectures, package release coordinates, and package-release identity.
+- Retained the complete issuing source snapshot beside the planner candidate.
+- Published the first candidate-control identity contract as
+  `libpkgsource-plan/candidate-control/v1` with a normative byte specification
+  and fixed vector.
+- Fixed identity construction so control is hashed before ownership is moved
+  into the planner fact.
+- Mapped identity phase codes explicitly instead of serializing enum
+  representation.
+- Published `libpkgsource` and `libpkgplan` exactly once as public pkg-config
+  requirements and retained libcrypto as one private requirement.
+- Added independent content, identity, exclusion, public-header, metadata,
+  owner-boundary, documentation, style, and release contract tests.
+- Added Doxygen, scdoc, formatter, compiler, sanitizer, installed-consumer, ELF,
+  static-closure, and replay qualification policy.
+- Established `CODESTYLE.md`, `.clang-format`, and `.editorconfig` as the house
+  engineering baseline.
 
 ## Import boundary
 
-The first repository commit imports the component exactly from
-`libpkgsource 2.1.0`. It is review provenance, not a published API or identity
-contract.
+The first repository import preserves the exact adapter state from
+`libpkgsource 2.1.0`. It is provenance for review, not a published API or
+identity compatibility promise.

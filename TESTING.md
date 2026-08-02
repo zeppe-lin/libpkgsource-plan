@@ -1,51 +1,57 @@
 # Testing
 
-The test suite qualifies both sides of the composition boundary.
+## Executable behavior
 
-## Projection behavior
+`projection-content` proves the exact owner facts that cross the boundary:
+package release, release identity, runtime dependencies, removal lifecycle, and
+target architecture control. It also proves wildcard handling and source-owner
+architecture ordering.
 
-The adapter test proves:
+`projection-identity` binds the published fixed vector. It varies each projected
+control group independently and proves that package release remains separate
+from candidate-control identity.
 
-- the projection retains the exact source snapshot and identity;
-- package name, version, release, and release identity cross the boundary;
-- run requirements become exact runtime dependency declarations;
-- pre-remove and post-remove program bytes become durable removal lifecycle;
-- target architectures become one normalized target-profile fact;
-- an unrestricted target architecture set becomes `*`;
-- changes to runtime dependencies, removal programs, or target architectures
-  change candidate-control identity;
-- a package-release change changes the candidate fact and release identity but
-  not an otherwise identical candidate-control identity;
-- changes to metadata, source inputs, build and check requirements, selected
-  build profiles, lifecycle requirements, build and check programs, build
-  architectures, or installation lifecycle change source identity but not the
-  projected planner candidate;
-- the published candidate-control fixed vector remains byte-for-byte stable.
+`projection-exclusions` varies each excluded semantic fact independently. Every
+case must change source identity while leaving the planner candidate equal. A
+separate case proves that source origin is retained provenance but does not
+change source identity or planner control.
 
-## Boundary contracts
+`public-umbrella` and `public-component` compile the two installed entry points
+in separate translation units and bind the public function type.
 
-`projection-boundary` statically requires every intended projection access and
-rejects access to excluded source facts. It also requires the complete source
-snapshot to remain part of `candidate_projection`.
+## Repository contracts
 
-`public-umbrella` and `public-component` compile the umbrella and component
-headers in separate translation units without private implementation headers.
+`owner-boundary` checks only surfaces that cannot be proved through behavior:
+public owner headers, direct dependency declarations, absence of YAML, codec,
+and image authority, and retention of the complete source snapshot.
 
-`metadata` validates one public `libpkgsource >= 3.0.0` requirement, one public
-`libpkgplan >= 0.2.0` requirement, and one private direct `libcrypto`
-requirement.
+`metadata` parses generated pkg-config output. It requires exactly one public
+`libpkgsource` dependency, exactly one public `libpkgplan` dependency, and
+exactly one private `libcrypto` dependency.
 
-`release-contract` validates project version, SONAME generation, dependency
-floors, the first public control-identity domain, the normative identity
-specification, and absence of pre-release syntax/identity generations.
+`documentation-contract` checks required documents, structural sections, public
+include examples, and owner-boundary terminology without binding incidental
+prose.
 
-## Required release matrix
+`style-contract` checks the repository style authority and Markdown rules.
+When `clang-format` is available, `format` checks every C++ source, header, and
+test against `.clang-format`.
 
-Before release, run clean shared and static builds with GCC and Clang, warnings
-as errors, against the exact signed `libpkgsource 3.0.0` and `libpkgplan 0.2.0`
-boundaries. Run ASan and UBSan over the adapter test. Render the scdoc manual and
-lint it with mandoc. Inspect `SONAME` and `NEEDED` entries and compile an
-installed external consumer through pkg-config.
+`release-contract` checks project version, SONAME generation, dependency floors,
+installed headers, pkg-config promotion, identity domain, fixed vector, and
+absence of unpublished identity or syntax generations.
 
-Static qualification must prove the complete libcrypto and owner-library
-closure using `pkg-config --static`.
+## Release qualification
+
+Before tagging, run clean shared and static builds with GCC and Clang against
+the exact supported owner boundaries. Promote warnings to errors. Run ASan and
+UBSan. Generate Doxygen without warnings. Render the scdoc manual and lint it
+with mandoc.
+
+Install each build into an empty prefix. Compile and run an external consumer
+through `pkg-config`; use `pkg-config --static` for the static closure. Inspect
+the shared object for the expected SONAME and direct `NEEDED` entries.
+
+Finally, run `git diff --check`, `git fsck`, and an independent `git am` replay.
+The replay tree, not an assumed commit identifier, is the reproducibility
+invariant.

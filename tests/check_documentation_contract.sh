@@ -2,38 +2,74 @@
 # SPDX-FileCopyrightText: 2026 Alexandr Savca
 # SPDX-License-Identifier: GPL-3.0-or-later
 set -eu
+
 root=$1
+
 fail()
 {
   echo "documentation-contract-test: $*" >&2
   exit 1
 }
-require()
+
+require_heading()
 {
   file=$1
-  text=$2
-  grep -F -- "$text" "$file" >/dev/null ||
-    fail "${file#$root/} omits: $text"
+  heading=$2
+  grep -F -- "$heading" "$file" >/dev/null ||
+    fail "${file#$root/} omits heading: $heading"
 }
 
-for file in README.md DESIGN.md TESTING.md MIGRATION.md CONTRIBUTING.md MAINTAINING.md HISTORY.md CANDIDATE-CONTROL-IDENTITY-1.md; do
-  [ -s "$root/$file" ] || fail "$file is missing or empty"
+for document in \
+  README.md \
+  DESIGN.md \
+  CANDIDATE-CONTROL-IDENTITY-1.md \
+  TESTING.md \
+  CODESTYLE.md \
+  MIGRATION.md \
+  CONTRIBUTING.md \
+  MAINTAINING.md \
+  HISTORY.md
+do
+  [ -s "$root/$document" ] || fail "$document is missing or empty"
 done
 
-require "$root/README.md" 'narrow composition adapter'
-require "$root/README.md" '#include <libpkgsource-plan/libpkgsource-plan.h>'
-require "$root/DESIGN.md" '<libpkgsource-plan/libpkgsource-plan.h>'
-require "$root/man/pkgsource_plan_adapter.3.scd" '*#include <libpkgsource-plan/libpkgsource-plan.h>*'
-require "$root/DESIGN.md" 'Excluded facts'
-require "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '2064db1e0c8a2934b1998aae9cd289cf'
-require "$root/TESTING.md" 'Required release matrix'
-require "$root/MIGRATION.md" 'No compatibility layer'
-require "$root/CONTRIBUTING.md" 'Every intentionally excluded source'
-require "$root/MAINTAINING.md" 'candidate-control/v1'
-require "$root/HISTORY.md" 'First independent source-to-planner projection release.'
-require "$root/man/pkgsource_plan_adapter.3.scd" '# AUTHORITY'
+require_heading "$root/README.md" '# libpkgsource-plan'
+require_heading "$root/README.md" '## Projection'
+require_heading "$root/README.md" '## Public API'
+require_heading "$root/DESIGN.md" '## Authority boundary'
+require_heading "$root/DESIGN.md" '## Projection map'
+require_heading "$root/DESIGN.md" '## Excluded source authority'
+require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Canonical record'
+require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Fixed vector'
+require_heading "$root/TESTING.md" '## Executable behavior'
+require_heading "$root/TESTING.md" '## Release qualification'
+require_heading "$root/MIGRATION.md" '## No compatibility layer'
+require_heading "$root/CONTRIBUTING.md" '## Boundary first'
+require_heading "$root/MAINTAINING.md" '## Release checklist'
+require_heading "$root/HISTORY.md" '## 1.0.0'
 
-if grep -R -E 'parse_(recipe|profiles)|yaml_parser|seal_recipe_yaml' \
-    "$root/README.md" "$root/DESIGN.md" "$root/man" >/dev/null; then
-  fail 'syntax parsing appears in planner-adapter documentation'
+for file in "$root/README.md" "$root/DESIGN.md" \
+            "$root/MIGRATION.md" "$root/man/pkgsource_plan_adapter.3.scd"; do
+  grep -F '<libpkgsource-plan/libpkgsource-plan.h>' "$file" >/dev/null ||
+    fail "${file#$root/} omits the umbrella include"
+done
+
+for section in '# DESCRIPTION' '# OWNERSHIP' '# IDENTITIES' '# ERRORS' \
+               '# AUTHORITY' '# ABI' '# SEE ALSO'; do
+  grep -F "$section" "$root/man/pkgsource_plan_adapter.3.scd" >/dev/null ||
+    fail "manual omits section: $section"
+done
+
+grep -F '2064db1e0c8a2934b1998aae9cd289cf' \
+  "$root/CANDIDATE-CONTROL-IDENTITY-1.md" >/dev/null ||
+  fail 'identity specification omits the fixed vector'
+
+if grep -R -E 'parse_(recipe|profiles)|seal_recipe_yaml|yaml_parser' \
+    "$root"/*.md "$root/man" >/dev/null; then
+  fail 'source-syntax implementation appears in adapter documentation'
+fi
+
+if grep -R -E 'is thread[- ]safe|is lock[- ]free|is backward compatible' \
+    "$root"/*.md "$root/man" >/dev/null; then
+  fail 'documentation claims an unqualified concurrency or compatibility rule'
 fi

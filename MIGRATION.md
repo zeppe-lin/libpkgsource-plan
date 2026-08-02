@@ -1,12 +1,12 @@
 # Migration from the in-tree adapter
 
-The planner projection formerly shipped as an optional library inside the
+The planner projection previously existed as an optional component in the
 pre-release `libpkgsource` repository. `libpkgsource-plan 1.0.0` is its first
 independent release.
 
-## Build metadata
+## Build dependency
 
-Consumers now depend directly on:
+Consumers now require:
 
 ```text
 libpkgsource-plan >= 1.0.0
@@ -14,24 +14,37 @@ libpkgsource >= 3.0.0
 libpkgplan >= 0.2.0
 ```
 
-The installed shared library is `libpkgsource-plan.so.1` and the pkg-config
-module is `libpkgsource-plan`.
+The pkg-config module is `libpkgsource-plan`. The shared library is
+`libpkgsource-plan.so.1`.
+
+## Include path
+
+Use the umbrella header:
+
+```cpp
+#include <libpkgsource-plan/libpkgsource-plan.h>
+```
+
+The component header `<libpkgsource-plan/adapter.h>` is also installed.
 
 ## Source API
 
-`project_candidate()` and `candidate_projection` retain their semantic role.
-Callers must supply a `libpkgsource 3` snapshot. There is no source-syntax value
-or recipe-format generation in the source authority API.
+`project_candidate()` still returns a planner candidate retained beside its
+issuing source snapshot. Callers supply a parser-neutral `libpkgsource 3`
+snapshot. No source-syntax value or recipe-format generation crosses the API.
 
-## Identities
+## Identity reset
 
-The candidate-control identity domain is reset from the unpublished internal
-`.../v2` spelling to the first public `libpkgsource-plan/candidate-control/v1`
-domain. Candidate identities produced by the pre-release in-tree adapter have
-no compatibility status and must not be retained as installed evidence.
+The unpublished in-tree candidate-control domain has no compatibility status.
+The first public contract is
+`libpkgsource-plan/candidate-control/v1`, specified in
+`CANDIDATE-CONTROL-IDENTITY-1.md`.
+
+Existing pre-release candidate identities must not be imported as installed or
+persistent evidence.
 
 ## No compatibility layer
 
-There is no compatibility alias for old SONAMEs, dependency metadata, source
-syntax arguments, or candidate-control identities. Pre-release consumers migrate
-atomically with `libpkgsource 3.0.0`.
+There is no compatibility alias for old SONAMEs, dependency metadata, syntax
+arguments, or unpublished candidate-control identities. Pre-release consumers
+migrate atomically with `libpkgsource 3.0.0`.
