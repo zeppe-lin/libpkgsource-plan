@@ -59,4 +59,12 @@ if get_option('tests').enabled()
       meson.project_source_root(),
     ],
   )
+  test(
+    'style-contract',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'check_style_contract.sh'),
+      meson.project_source_root(),
+    ],
+  )
 endif
