@@ -18,6 +18,12 @@ grep -F "soversion: '1'" "$root/src/meson.build" >/dev/null ||
 grep -F "'../include/libpkgsource-plan/libpkgsource-plan.h'" \
   "$root/src/meson.build" >/dev/null ||
   fail 'umbrella header is not installed'
+grep -F "'../include/libpkgsource-plan/export.h'" \
+  "$root/src/meson.build" >/dev/null ||
+  fail 'public visibility header is not installed'
+grep -F "gnu_symbol_visibility: 'hidden'" \
+  "$root/src/meson.build" >/dev/null ||
+  fail 'shared-library implementation is not hidden by default'
 grep -F '#include <libpkgsource-plan/adapter.h>' \
   "$root/include/libpkgsource-plan/libpkgsource-plan.h" >/dev/null ||
   fail 'umbrella header does not expose the complete adapter API'
@@ -25,6 +31,10 @@ grep -F "version: '>=3.0.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgsource dependency floor is not 3.0.0'
 grep -F "version: '>=0.2.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgplan dependency floor is not 0.2.0'
+grep -F "'sha256_provider'" "$root/meson.options" >/dev/null ||
+  fail 'SHA-256 provider option is missing'
+grep -F "choices: ['openssl']" "$root/meson.options" >/dev/null ||
+  fail 'qualified SHA-256 provider set is not explicit'
 grep -F 'requires: [libpkgsource_dep, libpkgplan_dep]' \
   "$root/src/meson.build" >/dev/null ||
   fail 'public pkg-config dependencies are not promoted by dependency object'
@@ -60,7 +70,7 @@ if grep -R -E 'scdoc|\.scd([^A-Za-z0-9_]|$)' \
   fail 'retired scdoc build or source references remain'
 fi
 grep -F 'libpkgsource-plan/candidate-control/v1' \
-  "$root/src/adapter.cpp" >/dev/null ||
+  "$root/src/internal/candidate_control_identity.cpp" >/dev/null ||
   fail 'first public control identity domain is not version one'
 grep -F 'libpkgsource-plan/candidate-control/v1' \
   "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||

@@ -1,6 +1,36 @@
 # SPDX-FileCopyrightText: 2026 Alexandr Savca
 # SPDX-License-Identifier: GPL-3.0-or-later
 if get_option('tests').enabled()
+  sha256_provider_test = executable(
+    'sha256-provider-test',
+    'internal/sha256_test.cpp',
+    include_directories: internal_inc,
+    dependencies: identity_dependencies,
+    link_with: libpkgsource_plan_identity,
+    install: false,
+  )
+  test('sha256-provider', sha256_provider_test)
+
+  candidate_control_identity_test = executable(
+    'candidate-control-identity-test',
+    'internal/candidate_control_identity_test.cpp',
+    include_directories: internal_inc,
+    dependencies: identity_dependencies,
+    link_with: libpkgsource_plan_identity,
+    install: false,
+  )
+  test('candidate-control-identity', candidate_control_identity_test)
+
+  source_release_identity_test = executable(
+    'source-release-identity-test',
+    'internal/source_release_identity_test.cpp',
+    include_directories: internal_inc,
+    dependencies: identity_dependencies,
+    link_with: libpkgsource_plan_identity,
+    install: false,
+  )
+  test('source-release-identity', source_release_identity_test)
+
   projection_content_test = executable(
     'projection-content-test',
     'projection/content_test.cpp',
@@ -42,6 +72,19 @@ if get_option('tests').enabled()
   test('public-component', public_component)
 
   sh = find_program('sh')
+  if library_kind == 'shared'
+    nm = find_program('nm')
+    test(
+      'abi-surface',
+      sh,
+      args: [
+        join_paths(meson.current_source_dir(), 'contracts/check_abi_surface.sh'),
+        nm.full_path(),
+        libpkgsource_plan.full_path(),
+      ],
+    )
+  endif
+
   test(
     'owner-boundary',
     sh,
