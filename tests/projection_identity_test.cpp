@@ -51,11 +51,10 @@ void binds_the_published_fixed_vector()
   const candidate_projection projection =
       project_candidate(source_fixture::make_snapshot());
 
-  require_equal(
-      projection.candidate().identity().string(),
-      std::string("v1:sha256:2064db1e0c8a2934b1998aae9cd289cf"
-                  "4faace757dbc0f153afd017a85781795"),
-      "candidate-control identity must match the published vector");
+  require_equal(projection.candidate().identity().string(),
+                std::string("v1:sha256:2064db1e0c8a2934b1998aae9cd289cf"
+                            "4faace757dbc0f153afd017a85781795"),
+                "candidate-control identity must match the published vector");
 }
 
 void projected_control_changes_control_identity()
@@ -75,14 +74,14 @@ void projected_control_changes_control_identity()
     const candidate_projection changed =
         project_candidate(source_fixture::make_snapshot(std::move(options)));
 
-    require_not_equal(
-        baseline.candidate().identity(),
-        changed.candidate().identity(),
-        std::string(current.name) + " must change control identity");
-    require_equal(
-        baseline.candidate().release(),
-        changed.candidate().release(),
-        std::string(current.name) + " must not change package release");
+    require_not_equal(baseline.candidate().identity(),
+                      changed.candidate().identity(),
+                      std::string(current.name) +
+                          " must change control identity");
+    require_equal(baseline.candidate().release(),
+                  changed.candidate().release(),
+                  std::string(current.name) +
+                      " must not change package release");
   }
 }
 

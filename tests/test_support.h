@@ -55,8 +55,7 @@ inline int run(std::initializer_list<test_case> cases)
       std::cerr << "FAIL: " << current.name << ": " << error.what() << '\n';
       return 1;
     } catch (...) {
-      std::cerr << "FAIL: " << current.name
-                << ": non-standard exception\n";
+      std::cerr << "FAIL: " << current.name << ": non-standard exception\n";
       return 1;
     }
   }

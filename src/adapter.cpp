@@ -30,8 +30,7 @@ constexpr std::array removal_actions{
     lifecycle_action::post_remove,
 };
 
-using digest_context =
-    std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>;
+using digest_context = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>;
 
 class candidate_control_identity_writer final {
 public:
@@ -112,8 +111,8 @@ private:
                          "source identity is not lowercase hexadecimal");
 }
 
-[[nodiscard]] pkgplan::sha256_digest_bytes decode_source_release_identity(
-    std::string_view hexadecimal)
+[[nodiscard]] pkgplan::sha256_digest_bytes
+decode_source_release_identity(std::string_view hexadecimal)
 {
   pkgplan::sha256_digest_bytes bytes{};
   if (hexadecimal.size() != bytes.size() * 2) {
@@ -146,8 +145,8 @@ private:
   return value;
 }
 
-[[nodiscard]] pkgplan::removal_lifecycle_phase to_planner_phase(
-    lifecycle_action action)
+[[nodiscard]] pkgplan::removal_lifecycle_phase
+to_planner_phase(lifecycle_action action)
 {
   switch (action) {
   case lifecycle_action::pre_remove:
@@ -162,8 +161,8 @@ private:
                          "installation lifecycle is not removal control");
 }
 
-[[nodiscard]] std::uint64_t identity_phase_code(
-    pkgplan::removal_lifecycle_phase phase)
+[[nodiscard]] std::uint64_t
+identity_phase_code(pkgplan::removal_lifecycle_phase phase)
 {
   switch (phase) {
   case pkgplan::removal_lifecycle_phase::pre_remove:
@@ -209,8 +208,8 @@ project_removal_lifecycle(const sealed_recipe& recipe)
   return lifecycle;
 }
 
-[[nodiscard]] std::vector<pkgplan::target_profile_fact> project_target_profile(
-    const sealed_recipe& recipe)
+[[nodiscard]] std::vector<pkgplan::target_profile_fact>
+project_target_profile(const sealed_recipe& recipe)
 {
   std::vector<pkgplan::target_profile_fact> profile;
   profile.push_back(pkgplan::target_profile_fact::make(
@@ -219,8 +218,8 @@ project_removal_lifecycle(const sealed_recipe& recipe)
   return profile;
 }
 
-[[nodiscard]] pkgplan::package_release project_package_release(
-    const package_release& source_release)
+[[nodiscard]] pkgplan::package_release
+project_package_release(const package_release& source_release)
 {
   return pkgplan::package_release(
       pkgplan::package_release_identity::from_sha256(
@@ -252,8 +251,7 @@ compute_candidate_control_identity(
   }
 
   writer.write_sequence_size(control.target_profile().size());
-  for (const pkgplan::target_profile_fact& profile :
-       control.target_profile()) {
+  for (const pkgplan::target_profile_fact& profile : control.target_profile()) {
     writer.write_text(profile.name());
     writer.write_text(profile.value());
   }

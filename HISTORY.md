@@ -27,7 +27,7 @@ First independent source-to-planner projection release.
 - Added Doxygen, scdoc, formatter, compiler, sanitizer, installed-consumer, ELF,
   static-closure, and replay qualification policy.
 - Established `CODESTYLE.md`, `.clang-format`, and `.editorconfig` as the house
-  engineering baseline.
+  engineering baseline, with clang-format 17 pinned for reproducible layout.
 
 ## Import boundary
 

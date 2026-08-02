@@ -37,5 +37,7 @@ grep -F '# Code style' "$root/CODESTYLE.md" >/dev/null ||
   fail 'CODESTYLE.md does not declare its purpose'
 grep -F 'Control statements always use braces' "$root/CODESTYLE.md" >/dev/null ||
   fail 'CODESTYLE.md does not bind braced control flow'
+grep -F '`clang-format 17`' "$root/CODESTYLE.md" >/dev/null ||
+  fail 'CODESTYLE.md does not pin the formatter major'
 grep -F 'Markdown uses ATX headings only' "$root/CODESTYLE.md" >/dev/null ||
   fail 'CODESTYLE.md does not bind Markdown headings'

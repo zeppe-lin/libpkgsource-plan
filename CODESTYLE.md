@@ -11,15 +11,19 @@ misread and difficult to make accidentally unsafe.
 
 ## C++ formatting
 
-C++ source and public headers are formatted by `.clang-format`.
+C++ source and public headers are formatted by `.clang-format` with
+`clang-format 17`. The formatter major is pinned because layout is repository
+state, not a developer-local preference.
 
 Control statements always use braces, including one-statement bodies. The
 braces are not decoration: they prevent comments, logging, or a second statement
 from silently changing control flow during maintenance.
 
 Use two-space indentation, no tabs, and an 80-column target. Pointer and
-reference symbols bind to the type. Includes are grouped and sorted by the
-formatter.
+reference symbols bind to the type. Includes are grouped by authority: this
+library, local test support, owner libraries, implementation-only third-party
+libraries, then the C++ standard library. The formatter sorts names within
+each group.
 
 Formatting changes should not be mixed with semantic changes unless the
 semantic edit necessarily rewrites the same lines.

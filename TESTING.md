@@ -34,8 +34,8 @@ include examples, and owner-boundary terminology without binding incidental
 prose.
 
 `style-contract` checks the repository style authority and Markdown rules.
-When `clang-format` is available, `format` checks every C++ source, header, and
-test against `.clang-format`.
+When `clang-format-17` is available, `format` checks every C++ source, header,
+and test against `.clang-format` and rejects a different formatter major.
 
 `release-contract` checks project version, SONAME generation, dependency floors,
 installed headers, pkg-config promotion, identity domain, fixed vector, and

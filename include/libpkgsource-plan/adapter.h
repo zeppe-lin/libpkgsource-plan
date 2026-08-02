@@ -7,11 +7,11 @@
  */
 #pragma once
 
-#include <stdexcept>
-#include <string>
-
 #include <libpkgplan/package_fact.h>
 #include <libpkgsource/snapshot.h>
+
+#include <stdexcept>
+#include <string>
 
 namespace pkgsource::plan_adapter {
 

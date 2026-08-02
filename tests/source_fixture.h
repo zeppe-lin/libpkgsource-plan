@@ -42,14 +42,13 @@ inline pkgsource::declaration_provenance provenance(const char* path,
   return pkgsource::declaration_provenance("recipe.yml", path, line, 3);
 }
 
-inline pkgsource::profile_catalog make_profile_catalog(
-    std::string profile_member)
+inline pkgsource::profile_catalog
+make_profile_catalog(std::string profile_member)
 {
   return pkgsource::profile_catalog::seal({
       pkgsource::profile_declaration(
           pkgsource::profile_reference("@toolchain"),
-          pkgsource::declaration_provenance(
-              "profiles.yml", "toolchain", 1, 1),
+          pkgsource::declaration_provenance("profiles.yml", "toolchain", 1, 1),
           {pkgsource::profile_member_declaration(
               pkgsource::requirement_subject(
                   pkgsource::package_reference(std::move(profile_member))),
@@ -67,18 +66,16 @@ inline pkgsource::source_snapshot make_snapshot(options values = {})
   sources.push_back(pkgsource::source_input::remote(
       std::move(values.source_url),
       "example.tar.gz",
-      pkgsource::digest(
-          pkgsource::digest_algorithm::sha256,
-          "0123456789abcdef0123456789abcdef"
-          "0123456789abcdef0123456789abcdef")));
+      pkgsource::digest(pkgsource::digest_algorithm::sha256,
+                        "0123456789abcdef0123456789abcdef"
+                        "0123456789abcdef0123456789abcdef")));
 
   return pkgsource::seal_source(
       pkgsource::source_origin(std::move(values.origin_document)),
       pkgsource::recipe_declaration(
-          pkgsource::package_release(
-              pkgsource::package_reference("example"),
-              std::move(values.version),
-              values.release),
+          pkgsource::package_release(pkgsource::package_reference("example"),
+                                     std::move(values.version),
+                                     values.release),
           pkgsource::package_metadata(
               std::move(values.summary), std::nullopt, std::nullopt, {"MIT"}),
           std::move(sources),
@@ -110,24 +107,20 @@ inline pkgsource::source_snapshot make_snapshot(options values = {})
           {
               pkgsource::lifecycle_program(
                   pkgsource::lifecycle_action::pre_install,
-                  pkgsource::program(
-                      pkgsource::program_language::posix_shell,
-                      std::move(values.pre_install_script))),
+                  pkgsource::program(pkgsource::program_language::posix_shell,
+                                     std::move(values.pre_install_script))),
               pkgsource::lifecycle_program(
                   pkgsource::lifecycle_action::post_install,
-                  pkgsource::program(
-                      pkgsource::program_language::posix_shell,
-                      std::move(values.post_install_script))),
+                  pkgsource::program(pkgsource::program_language::posix_shell,
+                                     std::move(values.post_install_script))),
               pkgsource::lifecycle_program(
                   pkgsource::lifecycle_action::pre_remove,
-                  pkgsource::program(
-                      pkgsource::program_language::posix_shell,
-                      std::move(values.pre_remove_script))),
+                  pkgsource::program(pkgsource::program_language::posix_shell,
+                                     std::move(values.pre_remove_script))),
               pkgsource::lifecycle_program(
                   pkgsource::lifecycle_action::post_remove,
-                  pkgsource::program(
-                      pkgsource::program_language::posix_shell,
-                      std::move(values.post_remove_script))),
+                  pkgsource::program(pkgsource::program_language::posix_shell,
+                                     std::move(values.post_remove_script))),
           },
           pkgsource::architecture_requirements(
               std::move(values.build_architectures),

@@ -84,7 +84,7 @@ if get_option('tests').enabled()
     ],
   )
 
-  clang_format = find_program('clang-format', required: false)
+  clang_format = find_program('clang-format-17', required: false)
   if clang_format.found()
     test(
       'format',

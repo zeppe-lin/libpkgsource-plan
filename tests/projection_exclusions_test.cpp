@@ -98,14 +98,14 @@ void excluded_semantic_facts_do_not_change_candidate()
     const candidate_projection changed =
         project_candidate(source_fixture::make_snapshot(std::move(options)));
 
-    require_not_equal(
-        baseline.source_identity(),
-        changed.source_identity(),
-        std::string(current.name) + " must remain source authority");
-    require_equal(
-        baseline.candidate(),
-        changed.candidate(),
-        std::string(current.name) + " must not cross the planner boundary");
+    require_not_equal(baseline.source_identity(),
+                      changed.source_identity(),
+                      std::string(current.name) +
+                          " must remain source authority");
+    require_equal(baseline.candidate(),
+                  changed.candidate(),
+                  std::string(current.name) +
+                      " must not cross the planner boundary");
   }
 }
 
