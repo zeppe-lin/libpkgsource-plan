@@ -20,10 +20,14 @@ else
   error('unsupported SHA-256 provider: ' + sha256_provider)
 endif
 
-identity_dependencies = [libpkgsource_dep, libpkgplan_dep] + \
-  sha256_provider_dependencies
-adapter_dependencies = [libpkgsource_dep, libpkgplan_dep] + \
-  sha256_provider_dependencies
+identity_dependencies = [
+  libpkgsource_dep,
+  libpkgplan_dep,
+] + sha256_provider_dependencies
+adapter_dependencies = [
+  libpkgsource_dep,
+  libpkgplan_dep,
+] + sha256_provider_dependencies
 
 library_link_args = []
 library_link_depends = []
