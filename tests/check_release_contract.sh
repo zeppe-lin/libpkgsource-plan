@@ -15,6 +15,12 @@ grep -F '## 1.0.0' "$root/HISTORY.md" >/dev/null ||
   fail 'release history is not finalized'
 grep -F "soversion: '1'" "$root/src/meson.build" >/dev/null ||
   fail 'library SONAME generation is not 1'
+grep -F "'../include/libpkgsource-plan/libpkgsource-plan.h'" \
+  "$root/src/meson.build" >/dev/null ||
+  fail 'umbrella header is not installed'
+grep -F '#include <libpkgsource-plan/adapter.h>' \
+  "$root/include/libpkgsource-plan/libpkgsource-plan.h" >/dev/null ||
+  fail 'umbrella header does not expose the complete adapter API'
 grep -F "version: '>=3.0.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgsource dependency floor is not 3.0.0'
 grep -F "version: '>=0.2.0'" "$root/meson.build" >/dev/null ||

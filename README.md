@@ -17,7 +17,7 @@ programs, build architecture constraints, installation lifecycle programs, and
 all other source authority remain outside planner candidate control.
 
 ```cpp
-#include <libpkgsource-plan/adapter.h>
+#include <libpkgsource-plan/libpkgsource-plan.h>
 
 auto projection = pkgsource::plan_adapter::project_candidate(snapshot);
 const auto& candidate = projection.candidate();

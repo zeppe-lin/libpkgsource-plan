@@ -21,6 +21,9 @@ for file in README.md DESIGN.md TESTING.md MIGRATION.md CONTRIBUTING.md MAINTAIN
 done
 
 require "$root/README.md" 'narrow composition adapter'
+require "$root/README.md" '#include <libpkgsource-plan/libpkgsource-plan.h>'
+require "$root/DESIGN.md" '<libpkgsource-plan/libpkgsource-plan.h>'
+require "$root/man/pkgsource_plan_adapter.3.scd" '*#include <libpkgsource-plan/libpkgsource-plan.h>*'
 require "$root/DESIGN.md" 'Excluded facts'
 require "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '2064db1e0c8a2934b1998aae9cd289cf'
 require "$root/TESTING.md" 'Required release matrix'

@@ -12,6 +12,14 @@ separate repository because it depends on both owners and must evolve only when
 either public contract changes. Neither authority library depends back on the
 adapter.
 
+## Public interface
+
+The complete public projection API is exposed through
+`<libpkgsource-plan/libpkgsource-plan.h>`. The component header
+`<libpkgsource-plan/adapter.h>` remains installed for precise includes, while
+consumer documentation and installed-consumer qualification use the umbrella
+header as the stable default entry point.
+
 ## Projected facts
 
 `project_candidate()` translates:

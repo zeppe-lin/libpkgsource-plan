@@ -28,7 +28,8 @@ The adapter test proves:
 rejects access to excluded source facts. It also requires the complete source
 snapshot to remain part of `candidate_projection`.
 
-`public-headers` compiles the installed header independently.
+`public-umbrella` and `public-component` compile the umbrella and component
+headers in separate translation units without private implementation headers.
 
 `metadata` validates one public `libpkgsource >= 3.0.0` requirement, one public
 `libpkgplan >= 0.2.0` requirement, and one private direct `libcrypto`

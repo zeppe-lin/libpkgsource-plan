@@ -9,13 +9,21 @@ if get_option('tests').enabled()
   )
   test('adapter', adapter_test)
 
-  public_headers = executable(
-    'public-headers',
+  public_umbrella = executable(
+    'public-umbrella',
+    'plan_umbrella_header_test.cpp',
+    dependencies: libpkgsource_plan_dep,
+    install: false,
+  )
+  test('public-umbrella', public_umbrella)
+
+  public_component = executable(
+    'public-component',
     'plan_adapter_header_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('public-headers', public_headers)
+  test('public-component', public_component)
 
   sh = find_program('sh')
   test(

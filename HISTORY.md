@@ -4,6 +4,8 @@
 
 First independent source-to-planner projection release.
 
+- Added `<libpkgsource-plan/libpkgsource-plan.h>` as the complete public
+  umbrella header while retaining the precise adapter component header.
 - Published `libpkgsource` and `libpkgplan` as public pkg-config requirements
   exactly once while retaining `libcrypto` as a private implementation
   dependency.

@@ -6,7 +6,7 @@ pkgsource_plan_adapter - project sealed source authority into planner facts
 
 # SYNOPSIS
 
-*#include <libpkgsource-plan/adapter.h>*
+*#include <libpkgsource-plan/libpkgsource-plan.h>*
 
 *pkgsource::plan_adapter::candidate_projection*++
 *pkgsource::plan_adapter::project_candidate(* \
