@@ -141,7 +141,7 @@ jobs:
 
       - name: Qualify manuals
         if: matrix.man_pages == 'enabled'
-        run: find build/man -type f -name '*.3' -exec mandoc -Tlint {} +
+        run: find build/docs/man -type f -name '*.3' -exec mandoc -Tlint {} +
 
       - name: Install
         run: meson install -C build

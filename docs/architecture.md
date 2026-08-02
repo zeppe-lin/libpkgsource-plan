@@ -26,7 +26,7 @@ cryptographic provider, tests, and project knowledge.
 include/libpkgsource-plan/   installed public API
 src/adapter.cpp              source-to-plan orchestration
 src/internal/                private identity and digest implementation
-man/                         canonical Markdown and generated roff
+docs/man/                    canonical Markdown and generated roff
 docs/protocols/              normative identity protocols
 docs/history/                retained migration provenance
 tests/projection/            public behavioral contracts

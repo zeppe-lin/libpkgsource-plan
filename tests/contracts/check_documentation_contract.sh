@@ -56,14 +56,14 @@ require_heading "$root/MAINTAINING.md" '## Release checklist'
 require_heading "$root/HISTORY.md" '## 1.0.0'
 
 for file in "$root/README.md" "$root/docs/architecture.md" \
-            "$root/docs/history/in-tree-adapter-migration.md" "$root/man/pkgsource_plan_adapter.3.md"; do
+            "$root/docs/history/in-tree-adapter-migration.md" "$root/docs/man/pkgsource_plan_adapter.3.md"; do
   grep -F '<libpkgsource-plan/libpkgsource-plan.h>' "$file" >/dev/null ||
     fail "${file#$root/} omits the umbrella include"
 done
 
 for section in '# DESCRIPTION' '# OWNERSHIP' '# IDENTITIES' '# ERRORS' \
                '# AUTHORITY' '# ABI' '# SEE ALSO'; do
-  grep -F "$section" "$root/man/pkgsource_plan_adapter.3.md" >/dev/null ||
+  grep -F "$section" "$root/docs/man/pkgsource_plan_adapter.3.md" >/dev/null ||
     fail "manual omits section: $section"
 done
 
@@ -79,11 +79,11 @@ do
 done
 
 if grep -R -E 'parse_(recipe|profiles)|seal_recipe_yaml|yaml_parser' \
-    "$root"/*.md "$root/docs" "$root/man" >/dev/null; then
+    "$root"/*.md "$root/docs" "$root/docs/man" >/dev/null; then
   fail 'source-syntax implementation appears in adapter documentation'
 fi
 
 if grep -R -E 'is thread[- ]safe|is lock[- ]free|is backward compatible' \
-    "$root"/*.md "$root/docs" "$root/man" >/dev/null; then
+    "$root"/*.md "$root/docs" "$root/docs/man" >/dev/null; then
   fail 'documentation claims an unqualified concurrency or compatibility rule'
 fi

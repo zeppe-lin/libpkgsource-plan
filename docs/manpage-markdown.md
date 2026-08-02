@@ -13,8 +13,8 @@ happens to have a roff output target.
 
 ## Canonical and generated files
 
-Canonical sources live in `man/*.md`. Generated pages live in
-`man/generated/` and use their installed manual-page names, including the
+Canonical sources live in `docs/man/*.md`. Generated pages live in
+`docs/man/generated/` and use their installed manual-page names, including the
 section suffix.
 
 Do not edit generated roff directly. Regenerate it with:

@@ -4,7 +4,7 @@
 set -eu
 
 root=$1
-source=$root/man/pkgsource_plan_adapter.3.md
+source=$root/docs/man/pkgsource_plan_adapter.3.md
 
 fail()
 {

@@ -31,7 +31,7 @@ new identity version.
 
 ## Manual pages
 
-Edit `man/*.md`, not `man/generated/*`. Run
+Edit `docs/man/*.md`, not `docs/man/generated/*`. Run
 `tools/update-man-pages.sh --write`, review the generated roff in the same
 commit, and run `tools/update-man-pages.sh --check` before submission. The
 restricted source and Pandoc 3.x compatibility profile is defined in

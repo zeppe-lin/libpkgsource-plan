@@ -46,16 +46,16 @@ if grep -E "^[[:space:]]*requires:.*'(libpkgsource|libpkgplan|libcrypto)" \
     "$root/src/meson.build" >/dev/null; then
   fail 'pkg-config owner dependencies use string requirements'
 fi
-[ -s "$root/man/pkgsource_plan_adapter.3.md" ] ||
+[ -s "$root/docs/man/pkgsource_plan_adapter.3.md" ] ||
   fail 'canonical Markdown manual source is missing'
-[ -s "$root/man/generated/pkgsource_plan_adapter.3" ] ||
+[ -s "$root/docs/man/generated/pkgsource_plan_adapter.3" ] ||
   fail 'generated roff manual is missing'
 [ -x "$root/tools/update-man-pages.sh" ] ||
   fail 'manual-page generator is missing or not executable'
 [ -s "$root/tools/canonicalize-man-roff.awk" ] ||
   fail 'manual-page roff canonicalizer is missing or empty'
 grep -F "input: 'generated/pkgsource_plan_adapter.3'" \
-  "$root/man/meson.build" >/dev/null ||
+  "$root/docs/man/meson.build" >/dev/null ||
   fail 'ordinary builds do not install committed generated roff'
 grep -F -- '--from=markdown-smart' \
   "$root/tools/update-man-pages.sh" >/dev/null ||
@@ -74,7 +74,7 @@ grep -F 'Pandoc 3.1 through 3.x is required' \
   "$root/tools/update-man-pages.sh" >/dev/null ||
   fail 'manual-page generator does not bind the qualified Pandoc major series'
 if grep -R -E 'scdoc|\.scd([^A-Za-z0-9_]|$)' \
-    "$root/man" "$root/meson.options" \
+    "$root/docs/man" "$root/meson.options" \
     "$root/.github/workflows/ci.yml" >/dev/null; then
   fail 'retired scdoc build or source references remain'
 fi

@@ -44,8 +44,8 @@ if [ "$major" -ne 3 ] || [ "$minor" -lt 1 ]; then
   fail "Pandoc 3.1 through 3.x is required; found $version"
 fi
 
-source=$root/man/pkgsource_plan_adapter.3.md
-output=$root/man/generated/pkgsource_plan_adapter.3
+source=$root/docs/man/pkgsource_plan_adapter.3.md
+output=$root/docs/man/generated/pkgsource_plan_adapter.3
 canonicalizer=$root/tools/canonicalize-man-roff.awk
 [ -f "$source" ] || fail "missing source: ${source#$root/}"
 [ -f "$canonicalizer" ] ||
@@ -66,7 +66,7 @@ trap 'rm -f "$raw" "$temporary"' EXIT HUP INT TERM
   --no-highlight \
   "$source" > "$raw"
 
-printf '.\\" Generated from man/pkgsource_plan_adapter.3.md; do not edit.\n' \
+printf '.\\" Generated from docs/man/pkgsource_plan_adapter.3.md; do not edit.\n' \
   > "$temporary"
 sed '1d' "$raw" | awk -f "$canonicalizer" >> "$temporary"
 
