@@ -38,8 +38,9 @@ provider fallback.
 4. Run sanitizers, generated metadata, installed consumers, and static closure.
 5. Inspect SONAME, ABI version node, exported symbols, and direct
    shared-library dependencies.
-6. Regenerate manuals with Pandoc, verify a clean generated diff, and lint the
-   committed roff with mandoc.
+6. Regenerate manuals with a supported Pandoc 3.x release, run the writer
+   canonicalization fixture, verify a clean generated diff, and lint the
+   committed roff with mandoc. Review a new Pandoc major before admitting it.
 7. Run repository contracts, `git diff --check`, and `git fsck`.
 8. Replay the patch series independently and compare final trees.
 

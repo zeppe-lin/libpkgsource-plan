@@ -34,7 +34,9 @@ new identity version.
 Edit `man/*.md`, not `man/generated/*`. Run
 `tools/update-man-pages.sh --write`, review the generated roff in the same
 commit, and run `tools/update-man-pages.sh --check` before submission. The
-restricted source profile is defined in `docs/manpage-markdown.md`.
+restricted source and Pandoc 3.x compatibility profile is defined in
+`docs/manpage-markdown.md`. Do not bypass the project roff canonicalizer or
+commit converter-only churn caused by an equivalent writer spelling.
 
 ## Acceptance
 

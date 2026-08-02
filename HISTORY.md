@@ -32,6 +32,8 @@ First independent source-to-planner projection release.
   replay qualification policy.
 - Made Markdown the canonical manual source and committed generated roff so
   ordinary builds do not require Pandoc.
+- Canonicalized equivalent Pandoc 3.x code-block and bullet output so generated
+  roff remains stable across qualified writer releases.
 - Established `docs/code-style.md`, `.clang-format`, and `.editorconfig` as the
   house engineering baseline, with clang-format 17 pinned for reproducible layout.
 - Organized project knowledge, tests, and private sources by authority and

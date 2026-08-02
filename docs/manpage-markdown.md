@@ -115,12 +115,21 @@ The repository generator invokes Pandoc with:
 --wrap=none
 ```
 
-Pandoc 3.1 or later is required for regeneration. The generator normalizes the
-version-bearing Pandoc comment so tool patch releases do not change committed
-output solely through provenance text.
+Pandoc 3.1 through the current 3.x series is supported for regeneration. A new
+Pandoc major version is not accepted implicitly; it requires an explicit writer
+compatibility review.
 
-Generated roff must pass `mandoc -Tlint`. CI regenerates every page and rejects
-any difference from the committed output.
+The generator disables syntax highlighting and passes Pandoc output through the
+project-owned `tools/canonicalize-man-roff.awk` filter. The filter removes font
+escapes from exact `.EX` examples and normalizes the equivalent `\(bu` and
+`\[bu]` bullet spellings. These are writer presentation details, not manual-page
+semantics. Canonicalization is idempotent and is covered by a fixture independent
+of the installed Pandoc version.
+
+The generator also replaces Pandoc's version-bearing provenance line with one
+stable project comment. After those normalizations, CI regenerates every page
+and rejects any byte difference from committed output. Generated roff must pass
+`mandoc -Tlint`.
 
 ## Review rules
 

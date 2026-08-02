@@ -50,8 +50,9 @@ the selected provider implementation.
 symbols, and absence of internal or standard-library exports.
 
 `release-contract`, `documentation-contract`, `style-contract`,
-`manpage-source`, `manpage-generated`, and `format` bind release metadata,
-knowledge layout, Markdown policy, generated roff, and mechanical C++ format.
+`manpage-source`, `manpage-normalizer`, `manpage-generated`, and `format` bind
+release metadata, knowledge layout, Markdown policy, Pandoc 3.x writer
+normalization, generated roff, and mechanical C++ format.
 
 ## Release qualification
 
