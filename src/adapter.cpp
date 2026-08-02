@@ -9,8 +9,10 @@
 
 #include <array>
 #include <cstdint>
+#include <exception>
 #include <limits>
 #include <memory>
+#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -18,132 +20,245 @@
 namespace pkgsource::plan_adapter {
 namespace {
 
-using context_ptr = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>;
+constexpr std::string_view candidate_control_identity_domain =
+    "libpkgsource-plan/candidate-control/v1";
+constexpr std::string_view shell_program_format = "text/x-posix-shell";
+constexpr std::string_view target_architectures_fact_name =
+    "pkgsource.target-architectures";
+constexpr std::array removal_actions{
+    lifecycle_action::pre_remove,
+    lifecycle_action::post_remove,
+};
 
-class identity_writer final {
+using digest_context =
+    std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>;
+
+class candidate_control_identity_writer final {
 public:
-  identity_writer() : context_(EVP_MD_CTX_new(), EVP_MD_CTX_free)
+  candidate_control_identity_writer()
+      : context_(EVP_MD_CTX_new(), EVP_MD_CTX_free)
   {
-    if (!context_
-        || EVP_DigestInit_ex(context_.get(), EVP_sha256(), nullptr) != 1)
+    if (!context_ ||
+        EVP_DigestInit_ex(context_.get(), EVP_sha256(), nullptr) != 1) {
       throw projection_error(projection_error_code::identity,
                              "SHA-256 initialization failed");
+    }
   }
 
-  void number(std::uint64_t value)
+  void write_u64(std::uint64_t value)
   {
-    std::array<unsigned char, 8> bytes{};
-    for (std::size_t i = 0; i < bytes.size(); ++i)
-      bytes[bytes.size() - 1 - i] =
-          static_cast<unsigned char>(value >> (i * 8));
-    update(bytes.data(), bytes.size());
+    std::array<std::uint8_t, 8> bytes{};
+    for (std::size_t index = 0; index < bytes.size(); ++index) {
+      bytes[bytes.size() - 1 - index] =
+          static_cast<std::uint8_t>(value >> (index * 8));
+    }
+    write_bytes(bytes.data(), bytes.size());
   }
 
-  void sequence_size(std::size_t value)
+  void write_sequence_size(std::size_t value)
   {
-    if (value > std::numeric_limits<std::uint64_t>::max())
-      throw projection_error(projection_error_code::identity,
-                             "identity sequence exceeds canonical u64 length");
-    number(static_cast<std::uint64_t>(value));
+    if constexpr (sizeof(std::size_t) > sizeof(std::uint64_t)) {
+      if (value > std::numeric_limits<std::uint64_t>::max()) {
+        throw projection_error(
+            projection_error_code::identity,
+            "identity sequence exceeds canonical u64 length");
+      }
+    }
+    write_u64(static_cast<std::uint64_t>(value));
   }
 
-  void text(std::string_view value)
+  void write_text(std::string_view value)
   {
-    sequence_size(value.size());
-    update(value.data(), value.size());
+    write_sequence_size(value.size());
+    write_bytes(value.data(), value.size());
   }
 
-  pkgplan::sha256_digest_bytes finish()
+  [[nodiscard]] pkgplan::sha256_digest_bytes finish()
   {
     pkgplan::sha256_digest_bytes bytes{};
     unsigned int size = 0;
-    if (EVP_DigestFinal_ex(context_.get(), bytes.data(), &size) != 1
-        || size != bytes.size())
+    if (EVP_DigestFinal_ex(context_.get(), bytes.data(), &size) != 1 ||
+        size != bytes.size()) {
       throw projection_error(projection_error_code::identity,
                              "SHA-256 finalization failed");
+    }
     return bytes;
   }
 
 private:
-  void update(const void* data, std::size_t size)
+  void write_bytes(const void* data, std::size_t size)
   {
-    if (EVP_DigestUpdate(context_.get(), data, size) != 1)
+    if (size == 0) {
+      return;
+    }
+    if (EVP_DigestUpdate(context_.get(), data, size) != 1) {
       throw projection_error(projection_error_code::identity,
                              "SHA-256 update failed");
+    }
   }
 
-  context_ptr context_;
+  digest_context context_;
 };
 
-pkgplan::sha256_digest_bytes parse_sha256(std::string_view hex)
+[[nodiscard]] std::uint8_t decode_hex_nibble(char value)
 {
-  if (hex.size() != 64)
+  if (value >= '0' && value <= '9') {
+    return static_cast<std::uint8_t>(value - '0');
+  }
+  if (value >= 'a' && value <= 'f') {
+    return static_cast<std::uint8_t>(value - 'a' + 10);
+  }
+  throw projection_error(projection_error_code::identity,
+                         "source identity is not lowercase hexadecimal");
+}
+
+[[nodiscard]] pkgplan::sha256_digest_bytes decode_source_release_identity(
+    std::string_view hexadecimal)
+{
+  pkgplan::sha256_digest_bytes bytes{};
+  if (hexadecimal.size() != bytes.size() * 2) {
     throw projection_error(projection_error_code::identity,
                            "source identity has invalid width");
-  pkgplan::sha256_digest_bytes bytes{};
-  const auto nibble = [](char c) -> unsigned int {
-    if (c >= '0' && c <= '9')
-      return static_cast<unsigned int>(c - '0');
-    if (c >= 'a' && c <= 'f')
-      return static_cast<unsigned int>(c - 'a' + 10);
-    throw projection_error(projection_error_code::identity,
-                           "source identity is not lowercase hexadecimal");
-  };
-  for (std::size_t i = 0; i < bytes.size(); ++i)
-    bytes[i] = static_cast<std::uint8_t>(
-        (nibble(hex[i * 2]) << 4) | nibble(hex[i * 2 + 1]));
+  }
+
+  for (std::size_t index = 0; index < bytes.size(); ++index) {
+    const std::uint8_t high = decode_hex_nibble(hexadecimal[index * 2]);
+    const std::uint8_t low = decode_hex_nibble(hexadecimal[index * 2 + 1]);
+    bytes[index] = static_cast<std::uint8_t>((high << 4) | low);
+  }
   return bytes;
 }
 
-std::string architecture_value(
-    const std::vector<pkgsource::architecture_reference>& architectures)
+[[nodiscard]] std::string encode_target_architectures(
+    const std::vector<architecture_reference>& architectures)
 {
-  if (architectures.empty())
+  if (architectures.empty()) {
     return "*";
-  std::string result;
-  for (const pkgsource::architecture_reference& architecture : architectures) {
-    if (!result.empty())
-      result += ',';
-    result += architecture.name();
   }
-  return result;
+
+  std::string value;
+  for (const architecture_reference& architecture : architectures) {
+    if (!value.empty()) {
+      value += ',';
+    }
+    value += architecture.name();
+  }
+  return value;
 }
 
-pkgplan::candidate_control_identity control_identity(
-    const pkgplan::candidate_control_projection& control)
-{
-  identity_writer writer;
-  writer.text("libpkgsource-plan/candidate-control/v1");
-  writer.sequence_size(control.runtime_dependencies().size());
-  for (const auto& dependency : control.runtime_dependencies())
-    writer.text(dependency.expression());
-  writer.sequence_size(control.removal_lifecycle().size());
-  for (const auto& lifecycle : control.removal_lifecycle()) {
-    writer.number(static_cast<std::uint64_t>(lifecycle.phase()));
-    writer.text(lifecycle.format());
-    writer.text(lifecycle.material());
-  }
-  writer.sequence_size(control.target_profile().size());
-  for (const auto& profile : control.target_profile()) {
-    writer.text(profile.name());
-    writer.text(profile.value());
-  }
-  return pkgplan::candidate_control_identity::from_sha256(writer.finish());
-}
-
-pkgplan::removal_lifecycle_phase translate_phase(lifecycle_action action)
+[[nodiscard]] pkgplan::removal_lifecycle_phase to_planner_phase(
+    lifecycle_action action)
 {
   switch (action) {
-    case lifecycle_action::pre_remove:
-      return pkgplan::removal_lifecycle_phase::pre_remove;
-    case lifecycle_action::post_remove:
-      return pkgplan::removal_lifecycle_phase::post_remove;
-    case lifecycle_action::pre_install:
-    case lifecycle_action::post_install:
-      break;
+  case lifecycle_action::pre_remove:
+    return pkgplan::removal_lifecycle_phase::pre_remove;
+  case lifecycle_action::post_remove:
+    return pkgplan::removal_lifecycle_phase::post_remove;
+  case lifecycle_action::pre_install:
+  case lifecycle_action::post_install:
+    break;
   }
   throw projection_error(projection_error_code::planner_fact,
-                         "installation lifecycle is not durable removal control");
+                         "installation lifecycle is not removal control");
+}
+
+[[nodiscard]] std::uint64_t identity_phase_code(
+    pkgplan::removal_lifecycle_phase phase)
+{
+  switch (phase) {
+  case pkgplan::removal_lifecycle_phase::pre_remove:
+    return 1;
+  case pkgplan::removal_lifecycle_phase::post_remove:
+    return 2;
+  }
+  throw projection_error(projection_error_code::identity,
+                         "unknown removal lifecycle phase");
+}
+
+[[nodiscard]] std::vector<pkgplan::runtime_dependency_declaration>
+project_runtime_dependencies(const sealed_recipe& recipe)
+{
+  const std::vector<resolved_requirement> requirements =
+      recipe.run_requirements();
+  std::vector<pkgplan::runtime_dependency_declaration> dependencies;
+  dependencies.reserve(requirements.size());
+
+  for (const resolved_requirement& requirement : requirements) {
+    dependencies.push_back(pkgplan::runtime_dependency_declaration::make(
+        requirement.package().name()));
+  }
+  return dependencies;
+}
+
+[[nodiscard]] std::vector<pkgplan::removal_lifecycle_declaration>
+project_removal_lifecycle(const sealed_recipe& recipe)
+{
+  std::vector<pkgplan::removal_lifecycle_declaration> lifecycle;
+  lifecycle.reserve(removal_actions.size());
+
+  for (const lifecycle_action action : removal_actions) {
+    const lifecycle_program* program = recipe.lifecycle(action);
+    if (program == nullptr) {
+      continue;
+    }
+    lifecycle.push_back(pkgplan::removal_lifecycle_declaration::make(
+        to_planner_phase(action),
+        shell_program_format,
+        program->value().material()));
+  }
+  return lifecycle;
+}
+
+[[nodiscard]] std::vector<pkgplan::target_profile_fact> project_target_profile(
+    const sealed_recipe& recipe)
+{
+  std::vector<pkgplan::target_profile_fact> profile;
+  profile.push_back(pkgplan::target_profile_fact::make(
+      target_architectures_fact_name,
+      encode_target_architectures(recipe.architectures().target())));
+  return profile;
+}
+
+[[nodiscard]] pkgplan::package_release project_package_release(
+    const package_release& source_release)
+{
+  return pkgplan::package_release(
+      pkgplan::package_release_identity::from_sha256(
+          decode_source_release_identity(source_release.identity().hex())),
+      source_release.package().name(),
+      source_release.version(),
+      std::to_string(source_release.release()));
+}
+
+[[nodiscard]] pkgplan::candidate_control_identity
+compute_candidate_control_identity(
+    const pkgplan::candidate_control_projection& control)
+{
+  candidate_control_identity_writer writer;
+  writer.write_text(candidate_control_identity_domain);
+
+  writer.write_sequence_size(control.runtime_dependencies().size());
+  for (const pkgplan::runtime_dependency_declaration& dependency :
+       control.runtime_dependencies()) {
+    writer.write_text(dependency.expression());
+  }
+
+  writer.write_sequence_size(control.removal_lifecycle().size());
+  for (const pkgplan::removal_lifecycle_declaration& lifecycle :
+       control.removal_lifecycle()) {
+    writer.write_u64(identity_phase_code(lifecycle.phase()));
+    writer.write_text(lifecycle.format());
+    writer.write_text(lifecycle.material());
+  }
+
+  writer.write_sequence_size(control.target_profile().size());
+  for (const pkgplan::target_profile_fact& profile :
+       control.target_profile()) {
+    writer.write_text(profile.name());
+    writer.write_text(profile.value());
+  }
+
+  return pkgplan::candidate_control_identity::from_sha256(writer.finish());
 }
 
 } // namespace
@@ -153,7 +268,11 @@ projection_error::projection_error(projection_error_code code,
     : std::runtime_error(std::move(message)), code_(code)
 {
 }
-projection_error_code projection_error::code() const noexcept { return code_; }
+
+projection_error_code projection_error::code() const noexcept
+{
+  return code_;
+}
 
 candidate_projection::candidate_projection(
     pkgsource::source_snapshot source,
@@ -161,15 +280,18 @@ candidate_projection::candidate_projection(
     : source_(std::move(source)), candidate_(std::move(candidate))
 {
 }
+
 const pkgsource::source_snapshot& candidate_projection::source() const noexcept
 {
   return source_;
 }
+
 const pkgsource::source_snapshot_identity&
 candidate_projection::source_identity() const noexcept
 {
   return source_.identity();
 }
+
 const pkgplan::candidate_package_fact&
 candidate_projection::candidate() const noexcept
 {
@@ -180,52 +302,25 @@ candidate_projection project_candidate(pkgsource::source_snapshot source)
 {
   try {
     const sealed_recipe& recipe = source.recipe();
-
-    std::vector<pkgplan::runtime_dependency_declaration> dependencies;
-    for (const resolved_requirement& requirement : recipe.run_requirements())
-      dependencies.push_back(
-          pkgplan::runtime_dependency_declaration::make(
-              requirement.package().name()));
-
-    std::vector<pkgplan::removal_lifecycle_declaration> lifecycle;
-    for (const lifecycle_action action : {
-             lifecycle_action::pre_remove,
-             lifecycle_action::post_remove}) {
-      const lifecycle_program* value = recipe.lifecycle(action);
-      if (!value)
-        continue;
-      lifecycle.push_back(pkgplan::removal_lifecycle_declaration::make(
-          translate_phase(action), "text/x-posix-shell",
-          value->value().material()));
-    }
-
-    std::vector<pkgplan::target_profile_fact> target_profile;
-    target_profile.push_back(pkgplan::target_profile_fact::make(
-        "pkgsource.target-architectures",
-        architecture_value(recipe.architectures().target())));
-
     pkgplan::candidate_control_projection control(
-        std::move(dependencies), std::move(lifecycle),
-        std::move(target_profile));
+        project_runtime_dependencies(recipe),
+        project_removal_lifecycle(recipe),
+        project_target_profile(recipe));
+    pkgplan::package_release release =
+        project_package_release(recipe.release());
 
-    const package_release& source_release = recipe.release();
-    pkgplan::package_release release(
-        pkgplan::package_release_identity::from_sha256(
-            parse_sha256(source_release.identity().hex())),
-        source_release.package().name(), source_release.version(),
-        std::to_string(source_release.release()));
     const pkgplan::candidate_control_identity identity =
-        control_identity(control);
+        compute_candidate_control_identity(control);
     pkgplan::candidate_package_fact candidate(
         identity, std::move(release), std::move(control));
     return candidate_projection(std::move(source), std::move(candidate));
   } catch (const projection_error&) {
     throw;
-  } catch (const std::exception& value) {
+  } catch (const std::exception& error) {
     throw projection_error(
         projection_error_code::planner_fact,
-        std::string("planner rejected source candidate projection: ")
-            + value.what());
+        std::string("planner rejected source candidate projection: ") +
+            error.what());
   }
 }
 
