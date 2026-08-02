@@ -23,7 +23,8 @@ in separate translation units and bind the public function type.
 
 `owner-boundary` checks only surfaces that cannot be proved through behavior:
 public owner headers, direct dependency declarations, absence of YAML, codec,
-and image authority, and retention of the complete source snapshot.
+and image authority, retention of the complete source snapshot, and narrow
+translation of planner-owned validation failures.
 
 `metadata` parses generated pkg-config output. It requires exactly one public
 `libpkgsource` dependency, exactly one public `libpkgplan` dependency, and

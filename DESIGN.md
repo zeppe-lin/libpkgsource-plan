@@ -80,9 +80,10 @@ is not part of source identity or planner control.
 `projection_error_code::identity` reports failures while decoding the source
 package-release digest or constructing candidate-control SHA-256 material.
 
-`projection_error_code::planner_fact` reports an exception raised while
-constructing planner-owned values. The original diagnostic text is retained in
-the adapter error message.
+`projection_error_code::planner_fact` reports a `pkgplan::fact_error` raised
+while constructing planner-owned values. The original diagnostic text is
+retained in the adapter error message. Unrelated standard exceptions are not
+reclassified as planner validation failures.
 
 The adapter performs no retry, fallback, or policy substitution.
 

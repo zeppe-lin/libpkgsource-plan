@@ -20,6 +20,8 @@ First independent source-to-planner projection release.
   into the planner fact.
 - Mapped identity phase codes explicitly instead of serializing enum
   representation.
+- Limited planner-failure translation to `pkgplan::fact_error`; unrelated
+  standard exceptions retain their original type.
 - Published `libpkgsource` and `libpkgplan` exactly once as public pkg-config
   requirements and retained libcrypto as one private requirement.
 - Added independent content, identity, exclusion, public-header, metadata,

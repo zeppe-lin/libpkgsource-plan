@@ -4,12 +4,13 @@
 
 #include <libpkgplan/control.h>
 #include <libpkgplan/digest.h>
+#include <libpkgplan/fact_error.h>
 
 #include <openssl/evp.h>
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
-#include <exception>
 #include <limits>
 #include <memory>
 #include <string>
@@ -314,7 +315,7 @@ candidate_projection project_candidate(pkgsource::source_snapshot source)
     return candidate_projection(std::move(source), std::move(candidate));
   } catch (const projection_error&) {
     throw;
-  } catch (const std::exception& error) {
+  } catch (const pkgplan::fact_error& error) {
     throw projection_error(
         projection_error_code::planner_fact,
         std::string("planner rejected source candidate projection: ") +

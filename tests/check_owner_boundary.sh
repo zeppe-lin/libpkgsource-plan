@@ -49,3 +49,10 @@ fi
 
 grep -F 'pkgsource::source_snapshot source_' "$public_header" >/dev/null ||
   fail 'projection does not retain complete source authority'
+
+
+grep -F 'catch (const pkgplan::fact_error& error)' "$implementation" >/dev/null ||
+  fail 'planner validation is not translated through pkgplan::fact_error'
+if grep -F 'catch (const std::exception&' "$implementation" >/dev/null; then
+  fail 'adapter broadly reclassifies unrelated standard exceptions'
+fi

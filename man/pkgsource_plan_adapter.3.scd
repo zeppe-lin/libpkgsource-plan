@@ -67,7 +67,8 @@ Failures throw *pkgsource::plan_adapter::projection_error*.
   failed.
 
 *projection_error_code::planner_fact*
-: A projected value was rejected while constructing a *libpkgplan* fact.
+: A projected value raised *pkgplan::fact_error* while constructing a
+  *libpkgplan* fact. Other standard exceptions are not reclassified.
 
 # AUTHORITY
 
