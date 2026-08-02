@@ -40,13 +40,16 @@ case $major:$minor in
     fail "cannot parse Pandoc version: $version"
     ;;
 esac
-if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 1 ]; }; then
-  fail "Pandoc 3.1 or later is required; found $version"
+if [ "$major" -ne 3 ] || [ "$minor" -lt 1 ]; then
+  fail "Pandoc 3.1 through 3.x is required; found $version"
 fi
 
 source=$root/man/pkgsource_plan_adapter.3.md
 output=$root/man/generated/pkgsource_plan_adapter.3
+canonicalizer=$root/tools/canonicalize-man-roff.awk
 [ -f "$source" ] || fail "missing source: ${source#$root/}"
+[ -f "$canonicalizer" ] ||
+  fail "missing canonicalizer: ${canonicalizer#$root/}"
 mkdir -p "$(dirname -- "$output")"
 
 raw=$(mktemp)
@@ -60,11 +63,12 @@ trap 'rm -f "$raw" "$temporary"' EXIT HUP INT TERM
   --fail-if-warnings \
   --eol=lf \
   --wrap=none \
+  --no-highlight \
   "$source" > "$raw"
 
 printf '.\\" Generated from man/pkgsource_plan_adapter.3.md; do not edit.\n' \
   > "$temporary"
-sed '1d' "$raw" >> "$temporary"
+sed '1d' "$raw" | awk -f "$canonicalizer" >> "$temporary"
 
 case $mode in
   --write)
