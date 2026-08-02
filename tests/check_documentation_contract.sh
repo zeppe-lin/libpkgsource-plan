@@ -25,6 +25,7 @@ for document in \
   CANDIDATE-CONTROL-IDENTITY-1.md \
   TESTING.md \
   CODESTYLE.md \
+  MANPAGE-MARKDOWN.md \
   MIGRATION.md \
   CONTRIBUTING.md \
   MAINTAINING.md \
@@ -43,20 +44,22 @@ require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Canonical record'
 require_heading "$root/CANDIDATE-CONTROL-IDENTITY-1.md" '## Fixed vector'
 require_heading "$root/TESTING.md" '## Executable behavior'
 require_heading "$root/TESTING.md" '## Release qualification'
+require_heading "$root/MANPAGE-MARKDOWN.md" '## Conversion contract'
+require_heading "$root/MANPAGE-MARKDOWN.md" '## Forbidden Markdown'
 require_heading "$root/MIGRATION.md" '## No compatibility layer'
 require_heading "$root/CONTRIBUTING.md" '## Boundary first'
 require_heading "$root/MAINTAINING.md" '## Release checklist'
 require_heading "$root/HISTORY.md" '## 1.0.0'
 
 for file in "$root/README.md" "$root/DESIGN.md" \
-            "$root/MIGRATION.md" "$root/man/pkgsource_plan_adapter.3.scd"; do
+            "$root/MIGRATION.md" "$root/man/pkgsource_plan_adapter.3.md"; do
   grep -F '<libpkgsource-plan/libpkgsource-plan.h>' "$file" >/dev/null ||
     fail "${file#$root/} omits the umbrella include"
 done
 
 for section in '# DESCRIPTION' '# OWNERSHIP' '# IDENTITIES' '# ERRORS' \
                '# AUTHORITY' '# ABI' '# SEE ALSO'; do
-  grep -F "$section" "$root/man/pkgsource_plan_adapter.3.scd" >/dev/null ||
+  grep -F "$section" "$root/man/pkgsource_plan_adapter.3.md" >/dev/null ||
     fail "manual omits section: $section"
 done
 

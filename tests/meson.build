@@ -83,6 +83,27 @@ if get_option('tests').enabled()
       meson.project_source_root(),
     ],
   )
+  test(
+    'manpage-source',
+    sh,
+    args: [
+      join_paths(meson.current_source_dir(), 'check_manpage_source.sh'),
+      meson.project_source_root(),
+    ],
+  )
+
+  pandoc = find_program('pandoc', required: false)
+  if pandoc.found()
+    test(
+      'manpage-generated',
+      sh,
+      args: [
+        join_paths(meson.current_source_dir(), 'check_manpage_generated.sh'),
+        meson.project_source_root(),
+        pandoc.full_path(),
+      ],
+    )
+  endif
 
   clang_format = find_program('clang-format-17', required: false)
   if clang_format.found()

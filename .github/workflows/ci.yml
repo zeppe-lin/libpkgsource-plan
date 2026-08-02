@@ -83,8 +83,8 @@ jobs:
             mandoc \
             meson \
             ninja-build \
-            pkg-config \
-            scdoc
+            pandoc \
+            pkg-config
 
       - name: Build and install owner libraries
         shell: bash

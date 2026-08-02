@@ -36,6 +36,25 @@ if grep -E "^[[:space:]]*requires:.*'(libpkgsource|libpkgplan|libcrypto)" \
     "$root/src/meson.build" >/dev/null; then
   fail 'pkg-config owner dependencies use string requirements'
 fi
+[ -s "$root/man/pkgsource_plan_adapter.3.md" ] ||
+  fail 'canonical Markdown manual source is missing'
+[ -s "$root/man/generated/pkgsource_plan_adapter.3" ] ||
+  fail 'generated roff manual is missing'
+[ -x "$root/tools/update-man-pages.sh" ] ||
+  fail 'manual-page generator is missing or not executable'
+grep -F "input: 'generated/pkgsource_plan_adapter.3'" \
+  "$root/man/meson.build" >/dev/null ||
+  fail 'ordinary builds do not install committed generated roff'
+grep -F -- '--from=markdown-smart' \
+  "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not bind the restricted Markdown reader'
+grep -F -- '--wrap=none' "$root/tools/update-man-pages.sh" >/dev/null ||
+  fail 'manual-page generator does not bind deterministic wrapping'
+if grep -R -E 'scdoc|\.scd([^A-Za-z0-9_]|$)' \
+    "$root/man" "$root/meson.options" \
+    "$root/.github/workflows/ci.yml" >/dev/null; then
+  fail 'retired scdoc build or source references remain'
+fi
 grep -F 'libpkgsource-plan/candidate-control/v1' \
   "$root/src/adapter.cpp" >/dev/null ||
   fail 'first public control identity domain is not version one'

@@ -11,11 +11,11 @@ fail()
   exit 1
 }
 
-for file in .clang-format .editorconfig CODESTYLE.md Doxyfile; do
+for file in .clang-format .editorconfig CODESTYLE.md MANPAGE-MARKDOWN.md Doxyfile; do
   [ -s "$root/$file" ] || fail "$file is missing or empty"
 done
 
-markdown=$(find "$root" -maxdepth 1 -type f -name '*.md' -print)
+markdown=$(find "$root" -path "$root/.git" -prune -o -type f -name '*.md' -print)
 
 if grep -n -E 'SPDX-(FileCopyrightText|License-Identifier)' $markdown >/dev/null; then
   fail 'Markdown contains SPDX comments; use COPYING and COPYRIGHT'
@@ -41,3 +41,6 @@ grep -F '`clang-format 17`' "$root/CODESTYLE.md" >/dev/null ||
   fail 'CODESTYLE.md does not pin the formatter major'
 grep -F 'Markdown uses ATX headings only' "$root/CODESTYLE.md" >/dev/null ||
   fail 'CODESTYLE.md does not bind Markdown headings'
+grep -F 'Manual pages use the restricted profile in `MANPAGE-MARKDOWN.md`' \
+  "$root/CODESTYLE.md" >/dev/null ||
+  fail 'CODESTYLE.md does not bind the manual-page profile'
