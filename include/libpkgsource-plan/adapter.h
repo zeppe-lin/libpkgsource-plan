@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include <libpkgsource-plan/export.h>
+
 #include <libpkgplan/package_fact.h>
 #include <libpkgsource/snapshot.h>
 
@@ -21,7 +23,7 @@ namespace pkgsource::plan_adapter {
 
 /** @brief Machine-readable category for a projection failure. */
 enum class projection_error_code {
-  /** Candidate or package-release identity material could not be produced. */
+  /** Candidate-control identity or package-release digest import failed. */
   identity,
 
   /** A value could not be represented by the planner owner API. */
@@ -35,7 +37,7 @@ enum class projection_error_code {
  * message for operators. The adapter does not translate owner-library error
  * types into additional policy categories.
  */
-class projection_error final : public std::runtime_error {
+class PKGSOURCE_PLAN_API projection_error final : public std::runtime_error {
 public:
   /**
    * @brief Construct a projection failure.
@@ -58,7 +60,7 @@ private:
  * source snapshot prevents that projection from erasing the authority and
  * identity from which the fact was derived.
  */
-class candidate_projection final {
+class PKGSOURCE_PLAN_API candidate_projection final {
 public:
   /**
    * @brief Bind a planner candidate to its issuing source snapshot.
@@ -100,10 +102,11 @@ private:
  * @param source Complete sealed source snapshot. The returned object owns this
  * snapshot; pass an rvalue to avoid a copy.
  * @return The projected planner fact and its retained issuing source.
- * @throws projection_error If identity material cannot be produced or an owner
- * value cannot be represented by the planner API.
+ * @throws projection_error If package-release identity import or
+ * candidate-control identity construction fails, or if an owner value cannot be
+ * represented by the planner API.
  */
-[[nodiscard]] candidate_projection
+[[nodiscard]] PKGSOURCE_PLAN_API candidate_projection
 project_candidate(pkgsource::source_snapshot source);
 
 } // namespace pkgsource::plan_adapter
