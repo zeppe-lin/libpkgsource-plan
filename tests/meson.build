@@ -141,6 +141,7 @@ if get_option('tests').enabled()
     args: [
       join_paths(meson.current_source_dir(), 'contracts/check_style_contract.sh'),
       meson.project_source_root(),
+      meson.project_build_root(),
     ],
   )
   test(
