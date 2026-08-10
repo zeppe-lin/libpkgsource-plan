@@ -3,79 +3,103 @@
 if get_option('tests').enabled()
   sha256_provider_test = executable(
     'sha256-provider-test',
-    'internal/sha256_test.cpp',
+    'mechanism/sha256_test.cpp',
     include_directories: internal_inc,
     dependencies: identity_dependencies,
     link_with: libpkgsource_plan_identity,
     install: false,
   )
-  test('sha256-provider', sha256_provider_test)
+  test('validate private SHA-256 provider', sha256_provider_test, suite: 'mechanism')
 
   candidate_control_identity_test = executable(
     'candidate-control-identity-test',
-    'internal/candidate_control_identity_test.cpp',
+    'protocol/candidate_control_identity_test.cpp',
     include_directories: internal_inc,
     dependencies: identity_dependencies,
     link_with: libpkgsource_plan_identity,
     install: false,
   )
-  test('candidate-control-identity', candidate_control_identity_test)
+  test(
+    'validate candidate-control identity protocol',
+    candidate_control_identity_test,
+    suite: 'protocol',
+  )
 
   source_release_identity_test = executable(
     'source-release-identity-test',
-    'internal/source_release_identity_test.cpp',
+    'protocol/source_release_identity_test.cpp',
     include_directories: internal_inc,
     dependencies: identity_dependencies,
     link_with: libpkgsource_plan_identity,
     install: false,
   )
-  test('source-release-identity', source_release_identity_test)
+  test(
+    'validate source release identity import',
+    source_release_identity_test,
+    suite: 'protocol',
+  )
 
   projection_content_test = executable(
     'projection-content-test',
-    'projection/content_test.cpp',
+    'unit/content_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('projection-content', projection_content_test)
-
-  projection_identity_test = executable(
-    'projection-identity-test',
-    'projection/identity_test.cpp',
-    dependencies: libpkgsource_plan_dep,
-    install: false,
-  )
-  test('projection-identity', projection_identity_test)
+  test('validate projected candidate content', projection_content_test, suite: 'unit')
 
   projection_exclusions_test = executable(
     'projection-exclusions-test',
-    'projection/exclusions_test.cpp',
+    'unit/exclusions_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('projection-exclusions', projection_exclusions_test)
+  test('validate excluded source authority', projection_exclusions_test, suite: 'unit')
+
+  projection_identity_test = executable(
+    'projection-identity-test',
+    'integration/identity_test.cpp',
+    dependencies: libpkgsource_plan_dep,
+    install: false,
+  )
+  test(
+    'compose source authority into candidate identity',
+    projection_identity_test,
+    suite: 'integration',
+  )
+
+  projection_binding_test = executable(
+    'projection-binding-test',
+    'integration/binding_test.cpp',
+    dependencies: libpkgsource_plan_dep,
+    install: false,
+  )
+  test(
+    'reject mismatched source and candidate authority',
+    projection_binding_test,
+    suite: 'integration',
+  )
 
   public_umbrella = executable(
     'public-umbrella',
-    'public/umbrella_header_test.cpp',
+    'header/umbrella_header_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('public-umbrella', public_umbrella)
+  test('compile public umbrella header', public_umbrella, suite: 'header')
 
   public_component = executable(
     'public-component',
-    'public/adapter_header_test.cpp',
+    'header/adapter_header_test.cpp',
     dependencies: libpkgsource_plan_dep,
     install: false,
   )
-  test('public-component', public_component)
+  test('compile adapter header independently', public_component, suite: 'header')
 
   sh = find_program('sh')
   if library_kind == 'shared'
     nm = find_program('nm')
     test(
-      'abi-surface',
+      'validate exact shared-library ABI surface',
       sh,
       args: [
         join_paths(meson.current_source_dir(), 'contracts/check_abi_surface.sh'),
@@ -83,84 +107,29 @@ if get_option('tests').enabled()
         libpkgsource_plan.full_path(),
         meson.project_source_root() / 'abi/libpkgsource-plan.exports',
       ],
+      suite: 'contracts',
     )
   endif
 
-  test(
-    'owner-boundary',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_owner_boundary.sh'),
-      meson.project_source_root(),
-    ],
-  )
-  test(
-    'release-contract',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_release_contract.sh'),
-      meson.project_source_root(),
-    ],
-  )
-  test(
-    'metadata',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/metadata_test.sh'),
-      meson.project_build_root(),
-      meson.project_version(),
-    ],
-  )
-  test(
-    'documentation-contract',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_documentation_contract.sh'),
-      meson.project_source_root(),
-    ],
-  )
-  test(
-    'documentation-install-contract',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_documentation_install_contract.sh'),
-      meson.project_source_root(),
-    ],
-  )
-  test(
-    'html-docs-contract',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_html_docs_contract.sh'),
-      meson.project_source_root(),
-    ],
-  )
-  test(
-    'style-contract',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_style_contract.sh'),
-      meson.project_source_root(),
-      meson.project_build_root(),
-    ],
-  )
-  test(
-    'manpage-source',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_manpage_source.sh'),
-      meson.project_source_root(),
-    ],
-  )
-
-  test(
-    'manpage-normalizer',
-    sh,
-    args: [
-      join_paths(meson.current_source_dir(), 'contracts/check_manpage_normalizer.sh'),
-      meson.project_source_root(),
-    ],
-  )
+  foreach contract : [
+    ['owner-boundary', 'check_owner_boundary.sh', [meson.project_source_root()]],
+    ['release-contract', 'check_release_contract.sh', [meson.project_source_root()]],
+    ['test-layout', 'check_test_layout.sh', [meson.project_source_root()]],
+    ['metadata', 'metadata_test.sh', [meson.project_build_root(), meson.project_version()]],
+    ['documentation-contract', 'check_documentation_contract.sh', [meson.project_source_root()]],
+    ['documentation-install-contract', 'check_documentation_install_contract.sh', [meson.project_source_root()]],
+    ['html-docs-contract', 'check_html_docs_contract.sh', [meson.project_source_root()]],
+    ['style-contract', 'check_style_contract.sh', [meson.project_source_root(), meson.project_build_root()]],
+    ['manpage-source', 'check_manpage_source.sh', [meson.project_source_root()]],
+    ['manpage-normalizer', 'check_manpage_normalizer.sh', [meson.project_source_root()]],
+  ]
+    test(
+      contract[0],
+      sh,
+      args: [join_paths(meson.current_source_dir(), 'contracts', contract[1])] + contract[2],
+      suite: 'contracts',
+    )
+  endforeach
 
   pandoc = find_program('pandoc', required: false)
   if pandoc.found()
@@ -172,6 +141,7 @@ if get_option('tests').enabled()
         meson.project_source_root(),
         pandoc.full_path(),
       ],
+      suite: 'contracts',
     )
   endif
 
@@ -185,6 +155,7 @@ if get_option('tests').enabled()
         clang_format.full_path(),
         meson.project_source_root(),
       ],
+      suite: 'contracts',
     )
   endif
 
@@ -201,6 +172,7 @@ if get_option('tests').enabled()
         '--forbid-path', meson.project_build_root(),
       ],
       depends: [html_docs_target],
+      suite: 'contracts',
     )
   endif
 endif

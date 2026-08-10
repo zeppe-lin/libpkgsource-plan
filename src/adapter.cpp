@@ -131,6 +131,37 @@ project_candidate_control(const sealed_recipe& recipe)
       project_target_profile(recipe));
 }
 
+[[nodiscard]] pkgplan::candidate_package_fact
+derive_candidate(const source_snapshot& source)
+{
+  try {
+    const sealed_recipe& recipe = source.recipe();
+    pkgplan::candidate_control_projection control =
+        project_candidate_control(recipe);
+    pkgplan::package_release release = project_package_release(recipe.release());
+
+    // Identity must be computed before control ownership is transferred. The
+    // result must never depend on function-argument evaluation order or the
+    // state of a moved-from control object.
+    const pkgplan::candidate_control_identity identity =
+        internal::compute_candidate_control_identity(control);
+
+    return pkgplan::candidate_package_fact(
+        identity, std::move(release), std::move(control));
+  } catch (const projection_error&) {
+    throw;
+  } catch (const internal::identity_error& error) {
+    throw projection_error(projection_error_code::identity, error.what());
+  } catch (const pkgplan::fact_error& error) {
+    // Translate only the planner owner's validation exception. Allocation,
+    // logic, and unrelated runtime failures retain their original type.
+    throw projection_error(
+        projection_error_code::planner_fact,
+        std::string("planner rejected source candidate projection: ") +
+            error.what());
+  }
+}
+
 } // namespace
 
 projection_error::projection_error(projection_error_code code,
@@ -151,6 +182,11 @@ candidate_projection::candidate_projection(
     pkgplan::candidate_package_fact candidate)
     : source_(std::move(source)), candidate_(std::move(candidate))
 {
+  if (candidate_ != derive_candidate(source_)) {
+    throw projection_error(
+        projection_error_code::source_binding,
+        "planner candidate does not match retained source authority");
+  }
 }
 
 const pkgsource::source_snapshot& candidate_projection::source() const noexcept
@@ -172,34 +208,8 @@ candidate_projection::candidate() const noexcept
 
 candidate_projection project_candidate(pkgsource::source_snapshot source)
 {
-  try {
-    const sealed_recipe& recipe = source.recipe();
-    pkgplan::candidate_control_projection control =
-        project_candidate_control(recipe);
-    pkgplan::package_release release =
-        project_package_release(recipe.release());
-
-    // Identity must be computed before control ownership is transferred. The
-    // result must never depend on function-argument evaluation order or the
-    // state of a moved-from control object.
-    const pkgplan::candidate_control_identity identity =
-        internal::compute_candidate_control_identity(control);
-
-    pkgplan::candidate_package_fact candidate(
-        identity, std::move(release), std::move(control));
-    return candidate_projection(std::move(source), std::move(candidate));
-  } catch (const projection_error&) {
-    throw;
-  } catch (const internal::identity_error& error) {
-    throw projection_error(projection_error_code::identity, error.what());
-  } catch (const pkgplan::fact_error& error) {
-    // Translate only the planner owner's validation exception. Allocation,
-    // logic, and unrelated runtime failures retain their original type.
-    throw projection_error(
-        projection_error_code::planner_fact,
-        std::string("planner rejected source candidate projection: ") +
-            error.what());
-  }
+  pkgplan::candidate_package_fact candidate = derive_candidate(source);
+  return candidate_projection(std::move(source), std::move(candidate));
 }
 
 } // namespace pkgsource::plan_adapter

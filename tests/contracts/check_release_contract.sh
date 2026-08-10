@@ -9,14 +9,14 @@ fail()
   exit 1
 }
 
-grep -F "version: '1.0.0'" "$root/meson.build" >/dev/null ||
-  fail 'project version is not 1.0.0'
+grep -F "version: '1.1.0'" "$root/meson.build" >/dev/null ||
+  fail 'project version is not 1.1.0'
 grep -F "meson_version: '>=1.2.0'" "$root/meson.build" >/dev/null ||
   fail 'declared Meson floor is not 1.2.0'
 if grep -F 'elf_export_script.full_path()' "$root/src/meson.build" >/dev/null; then
   fail 'export script path requires Meson 1.4 file.full_path()'
 fi
-grep -F '## 1.0.0' "$root/HISTORY.md" >/dev/null ||
+grep -F '## 1.1.0' "$root/HISTORY.md" >/dev/null ||
   fail 'release history is not finalized'
 grep -F "soversion: '1'" "$root/src/meson.build" >/dev/null ||
   fail 'library SONAME generation is not 1'
@@ -43,8 +43,8 @@ grep -F '#include <libpkgsource-plan/adapter.h>' \
   fail 'umbrella header does not expose the complete adapter API'
 grep -F "version: '>=3.0.0'" "$root/meson.build" >/dev/null ||
   fail 'libpkgsource dependency floor is not 3.0.0'
-grep -F "version: '>=0.2.0'" "$root/meson.build" >/dev/null ||
-  fail 'libpkgplan dependency floor is not 0.2.0'
+grep -F "version: '>=0.3.1'" "$root/meson.build" >/dev/null ||
+  fail 'libpkgplan dependency floor is not 0.3.1'
 grep -F "'sha256_provider'" "$root/meson.options" >/dev/null ||
   fail 'SHA-256 provider option is missing'
 grep -F "choices: ['openssl']" "$root/meson.options" >/dev/null ||
@@ -124,3 +124,18 @@ if grep -R -E 'candidate-control/v2|source_syntax|recipe_yaml_v[0-9]' \
     "$root" --exclude-dir=.git --exclude='check_release_contract.sh' >/dev/null; then
   fail 'pre-release source or identity generations remain in release tree'
 fi
+
+grep -F 'source_binding,' \
+  "$root/include/libpkgsource-plan/adapter.h" >/dev/null ||
+  fail 'public source-binding failure category is missing'
+grep -F 'derive_candidate(source_)' "$root/src/adapter.cpp" >/dev/null ||
+  fail 'public candidate projection does not verify retained source binding'
+grep -F 'ref: v0.3.1' "$root/.github/workflows/ci.yml" >/dev/null ||
+  fail 'hosted qualification does not use current libpkgplan 0.3.1 owner'
+grep -F 'tests/installed/consumer.cpp' "$root/.github/workflows/ci.yml" >/dev/null ||
+  fail 'installed qualification does not exercise the real adapter consumer'
+grep -F 'ref: v0.4.0' "$root/.github/workflows/ci.yml" >/dev/null ||
+  fail 'hosted planner closure does not use libpkgimage 0.4.0'
+grep -F 'project_candidate(source_fixture::make_snapshot())' \
+  "$root/tests/installed/consumer.cpp" >/dev/null ||
+  fail 'installed consumer does not call the real source-to-plan adapter'

@@ -14,7 +14,7 @@ fail()
 
 [ -s "$source" ] || fail 'canonical Markdown source is missing or empty'
 
-expected_title='% PKGSOURCE_PLAN_ADAPTER(3) libpkgsource-plan 1.0.0 | libpkgsource-plan'
+expected_title='% PKGSOURCE_PLAN_ADAPTER(3) libpkgsource-plan 1.1.0 | libpkgsource-plan'
 actual_title=$(sed -n '1p' "$source")
 [ "$actual_title" = "$expected_title" ] ||
   fail 'Pandoc title block does not match the release page identity'

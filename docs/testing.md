@@ -1,32 +1,40 @@
 # Testing
 
-## Projection behavior
+## Unit projection behavior
 
 `projection-content` proves the exact owner facts that cross the boundary:
 package release, release identity, runtime dependencies, removal lifecycle, and
 target architecture control. It also proves wildcard handling and source-owner
 architecture ordering.
 
-`projection-identity` binds the published fixed vector through the public
-adapter. It varies each projected control group independently and proves that
-package release remains separate from candidate-control identity.
-
 `projection-exclusions` varies each excluded semantic fact independently. Every
 case must change source identity while leaving the planner candidate equal. A
 separate case proves that source origin is retained provenance but not semantic
 identity.
 
-## Internal identity behavior
+## Integration seams
 
-`sha256-provider` binds the selected provider to standard empty-input,
-incremental `abc`, and exact binary-input vectors.
+`projection-identity` binds the published fixed vector through the real
+`libpkgsource` → adapter → `libpkgplan` path. It varies each projected control
+group independently and proves that package release remains separate from
+candidate-control identity.
 
-`candidate-control-identity` calls the private protocol encoder directly. It
-binds the published version-one vector and proves that encoding observes
-planner-normalized order rather than caller insertion order.
+`projection-binding` directly exercises the public `candidate_projection`
+constructor. It rejects a candidate from different projected control, rejects a
+candidate from another package release, and accepts a distinct source snapshot
+when its planner-visible projection is exactly equivalent.
 
-`source-release-identity` proves that validated source SHA-256 bytes enter the
-planner package-release digest domain unchanged.
+## Protocol and mechanism behavior
+
+The `mechanism` `sha256-provider` test binds the selected provider to standard
+empty-input, incremental `abc`, and exact binary-input vectors.
+
+The `protocol` `candidate-control-identity` test calls the private protocol
+encoder directly. It binds the published version-one vector and proves that
+encoding observes planner-normalized order rather than caller insertion order.
+
+The `protocol` `source-release-identity` test proves that validated source
+SHA-256 bytes enter the planner package-release digest domain unchanged.
 
 These tests do not make private headers public. Meson links them against the
 non-installed private identity archive used by the shared library.
@@ -34,8 +42,10 @@ non-installed private identity archive used by the shared library.
 ## Public headers
 
 `public-umbrella` and `public-component` compile and execute consumers through
-the aggregate and component include paths. CI repeats the umbrella consumer
-after installation through generated pkg-config metadata.
+the aggregate and component include paths. CI then compiles and runs
+`tests/installed/consumer.cpp` solely through generated installed pkg-config
+metadata; that consumer calls `project_candidate()` so static qualification
+pulls the complete private closure rather than merely parsing headers.
 
 ## Repository contracts
 
@@ -68,7 +78,7 @@ The release matrix covers:
 - warnings as errors;
 - GCC and Clang ASan/UBSan runs;
 - the complete owner-library closure;
-- all projection, internal identity, and public-header tests;
+- all unit, integration, protocol, mechanism, and public-header tests;
 - installed shared and static consumers through pkg-config;
 - SONAME and direct shared-library dependencies;
 - Doxygen API HTML, project Markdown HTML, Pandoc man-page regeneration, and

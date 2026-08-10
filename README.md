@@ -5,7 +5,9 @@
 
 It accepts one complete `pkgsource::source_snapshot`, constructs the planner
 facts that are representable by the current planner API, and returns both the
-candidate and the source snapshot that issued it.
+candidate and the source snapshot that issued it. The public projection value
+verifies this relationship on construction, so an unrelated planner candidate
+cannot be attached to retained source authority.
 
 ## Projection
 
@@ -63,5 +65,5 @@ Canonical project documentation is installed under
 
 Set `-Dhtml_docs=enabled` to generate a self-contained documentation tree from
 project Markdown and public Doxygen declarations. The versioned artifact installs
-under `share/htmldocs/libpkgsource-plan/1.0.0` and is suitable for direct static
+under `share/htmldocs/libpkgsource-plan/1.1.0` and is suitable for direct static
 publication.

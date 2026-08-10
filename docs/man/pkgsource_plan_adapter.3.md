@@ -1,4 +1,4 @@
-% PKGSOURCE_PLAN_ADAPTER(3) libpkgsource-plan 1.0.0 | libpkgsource-plan
+% PKGSOURCE_PLAN_ADAPTER(3) libpkgsource-plan 1.1.0 | libpkgsource-plan
 
 # NAME
 

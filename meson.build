@@ -3,7 +3,7 @@
 project(
   'libpkgsource-plan',
   'cpp',
-  version: '1.0.0',
+  version: '1.1.0',
   license: 'GPL-3.0-or-later',
   meson_version: '>=1.2.0',
   default_options: [
@@ -31,7 +31,7 @@ libpkgsource_dep = dependency(
 )
 libpkgplan_dep = dependency(
   'libpkgplan',
-  version: '>=0.2.0',
+  version: '>=0.3.1',
   required: true,
   static: want_static,
 )

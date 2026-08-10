@@ -32,9 +32,12 @@ docs/protocols/              normative identity protocols
 abi/                         reviewed dynamic-symbol manifest
 docs/history/                retained migration provenance
 docs/assets/                 project-owned HTML presentation assets
-tests/projection/            public behavioral contracts
-tests/internal/              private identity and provider contracts
-tests/public/                installed-header contracts
+tests/unit/                  projection content and exclusion semantics
+tests/integration/           owner-to-owner identity and binding seams
+tests/protocol/              private canonical identity protocols
+tests/mechanism/             private cryptographic provider behavior
+tests/header/                independent public-header qualification
+tests/installed/             staged pkg-config consumer
 tests/contracts/             repository and generated-artifact contracts
 tests/support/               shared semantic fixtures
 tools/                       maintainer-only generators
@@ -95,7 +98,9 @@ is reviewed separately in `abi/libpkgsource-plan.exports`.
    domain;
 5. compute candidate-control identity over normalized planner control;
 6. move release and control into `candidate_package_fact`;
-7. return the candidate beside the complete issuing source snapshot.
+7. construct `candidate_projection`, which independently reprojects the
+   retained source and refuses a mismatched candidate binding;
+8. return the verified candidate beside the complete issuing source snapshot.
 
 Candidate-control identity is computed before control is moved. Function
 argument evaluation order must never determine identity material.
@@ -176,14 +181,22 @@ candidate-control identity.
 
 `projection_error_code::planner_fact` reports a `pkgplan::fact_error` raised
 while constructing planner-owned values. The original diagnostic text is
-retained in the adapter error message. Allocation failures, logic failures, and
-unrelated standard exceptions are not reclassified.
+retained in the adapter error message.
+
+`projection_error_code::source_binding` reports that a public
+`candidate_projection` constructor was given a planner candidate that does not
+equal the candidate derived from its retained source. The check compares the
+planner-visible projection, not source identity: distinct sources whose excluded
+authority differs may legitimately produce the same candidate.
+
+Allocation failures, logic failures, and unrelated standard exceptions are not
+reclassified.
 
 The adapter performs no retry, provider fallback, or policy substitution.
 
 ## Dependencies and ABI
 
-The public API depends on `libpkgsource >= 3.0.0` and `libpkgplan >= 0.2.0`.
+The public API depends on `libpkgsource >= 3.0.0` and `libpkgplan >= 0.3.1`.
 The selected SHA-256 provider is a private implementation dependency. With the
 current provider, generated pkg-config metadata records `libcrypto` privately.
 

@@ -78,9 +78,9 @@ grep -E \
   "$metadata" >/dev/null ||
   fail 'public libpkgsource floor is not 3.0.0'
 grep -E \
-  'Requires:.*libpkgplan[[:space:]]*>=[[:space:]]*0\.2\.0' \
+  'Requires:.*libpkgplan[[:space:]]*>=[[:space:]]*0\.3\.1' \
   "$metadata" >/dev/null ||
-  fail 'public libpkgplan floor is not 0.2.0'
+  fail 'public libpkgplan floor is not 0.3.1'
 grep -E 'Requires\.private:.*libcrypto' "$metadata" >/dev/null ||
   fail 'private libcrypto requirement is missing'
 grep -E 'Libs:.*-lpkgsource-plan' "$metadata" >/dev/null ||

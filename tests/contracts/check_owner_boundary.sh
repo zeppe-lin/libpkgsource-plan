@@ -79,3 +79,6 @@ grep -F 'catch (const pkgplan::fact_error& error)' "$adapter" >/dev/null ||
 if grep -F 'catch (const std::exception&' "$adapter" >/dev/null; then
   fail 'adapter broadly reclassifies unrelated standard exceptions'
 fi
+
+grep -F 'derive_candidate(source_)' "$adapter" >/dev/null ||
+  fail 'public candidate projection no longer verifies its retained source'

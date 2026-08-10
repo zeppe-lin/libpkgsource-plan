@@ -28,6 +28,9 @@ enum class projection_error_code {
 
   /** A value could not be represented by the planner owner API. */
   planner_fact,
+
+  /** A supplied planner candidate does not match its retained source. */
+  source_binding,
 };
 
 /**
@@ -67,8 +70,19 @@ class PKGSOURCE_PLAN_API candidate_projection final {
 public:
   /**
    * @brief Bind a planner candidate to its issuing source snapshot.
+   *
+   * Construction reprojects the planner-owned facts from @p source and
+   * refuses a candidate whose release, normalized control, or
+   * candidate-control identity differs. The public value therefore cannot be
+   * used to attach arbitrary planner authority to an unrelated source.
+   *
    * @param source Complete sealed source authority, taken by value.
-   * @param candidate Planner fact derived from @p source, taken by value.
+   * @param candidate Planner fact claimed to derive from @p source, taken by
+   * value.
+   * @throws projection_error with code
+   * projection_error_code::source_binding if @p candidate does not equal the
+   * candidate derived from @p source. Identity-provider and planner fact
+   * failures retain their normal projection categories.
    */
   candidate_projection(pkgsource::source_snapshot source,
                        pkgplan::candidate_package_fact candidate);

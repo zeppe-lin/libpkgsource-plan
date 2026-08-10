@@ -1,5 +1,24 @@
 # History
 
+## 1.1.0
+
+Testing-foundation hardening release.
+
+- Made the public `candidate_projection` constructor verify that the supplied
+  planner candidate is exactly the projection admitted by its retained source
+  authority. Mismatched release, control, or candidate-control identity now
+  fails with `projection_error_code::source_binding`.
+- Kept distinct source snapshots admissible when their planner-visible
+  projection is semantically identical; excluded source authority remains
+  retained rather than entering planner candidate identity.
+- Qualified against and raised the public owner floor to `libpkgplan >= 0.3.1`;
+  the 1.0.0 adapter remains the old-toolchain boundary for planner 0.2.x.
+- Replaced the header-only installed-consumer check with a real
+  `project_candidate()` call so shared/static pkg-config qualification exercises
+  the complete `libpkgsource`, `libpkgplan`, and private `libcrypto` closure.
+- Reorganized tests by unit, integration, protocol, mechanism, header,
+  installed-consumer, support, and repository-contract ownership.
+
 ## 1.0.0
 
 First independent source-to-planner projection release.
