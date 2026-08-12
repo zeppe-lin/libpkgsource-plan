@@ -1,4 +1,4 @@
-# Maintaining
+# Maintaining libpkgsource-plan
 
 ## Release ownership
 

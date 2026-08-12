@@ -41,11 +41,11 @@ The umbrella header is the normal consumer entry point. The component header
 
 ## Contracts
 
-- `docs/architecture.md` defines ownership, tree, projection, and provider
+- `DESIGN.md` defines ownership, tree, projection, and provider
   boundaries.
 - `docs/protocols/candidate-control-identity-v1.md` defines the durable identity
   framing.
-- `docs/testing.md` maps public, internal, and repository tests to their
+- `TESTING.md` maps public, internal, and repository tests to their
   contracts.
 - `docs/abi.md` defines the reviewed ELF export boundary.
 - `docs/code-style.md` defines the repository engineering standard.

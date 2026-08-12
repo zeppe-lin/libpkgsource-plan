@@ -1,4 +1,4 @@
-# Architecture
+# libpkgsource-plan design
 
 ## Authority boundary
 

@@ -17,7 +17,7 @@ An enabled build produces:
 ```text
 build/docs/html/libpkgsource-plan/1.1.0/
 ├── index.html
-├── architecture.html
+├── design.html
 ├── abi.html
 ├── manual/
 ├── protocols/

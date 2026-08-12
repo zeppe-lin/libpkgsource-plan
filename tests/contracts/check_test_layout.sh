@@ -29,3 +29,16 @@ done
 for retired in projection internal public; do
   [ ! -d "$root/tests/$retired" ] || fail "retired tests/$retired remains"
 done
+
+meson=$root/tests/meson.build
+for contract in "$root"/tests/contracts/check_*.sh; do
+  [ -x "$contract" ] || fail "contract is not executable: ${contract#$root/}"
+  name=$(basename "$contract")
+  case $name in
+    check_installed_docs.sh | check_installed_html_docs.sh)
+      continue
+      ;;
+  esac
+  grep -F "$name" "$meson" >/dev/null ||
+    fail "shell contract is not registered in Meson: $name"
+done

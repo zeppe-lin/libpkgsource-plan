@@ -21,11 +21,11 @@ for file in \
   MAINTAINING.md \
   COPYING \
   COPYRIGHT \
-  architecture.md \
+  DESIGN.md \
   abi.md \
   code-style.md \
   manpage-markdown.md \
-  testing.md \
+  TESTING.md \
   html.md \
   protocols/candidate-control-identity-v1.md \
   history/in-tree-adapter-migration.md \

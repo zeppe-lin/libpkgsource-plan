@@ -1,4 +1,4 @@
-# Contributing
+# Contributing to libpkgsource-plan
 
 ## Boundary first
 
@@ -48,6 +48,6 @@ structure or presentation.
 
 ## Acceptance
 
-Run the matrix in `docs/testing.md`. Patches that pass only the adapter test but
+Run the matrix in `TESTING.md`. Patches that pass only the adapter test but
 skip metadata, installed consumers, owner closure, manuals, staged documentation
 installation, or replay are incomplete.

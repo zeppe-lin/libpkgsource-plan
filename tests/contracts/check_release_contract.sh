@@ -130,12 +130,14 @@ grep -F 'source_binding,' \
   fail 'public source-binding failure category is missing'
 grep -F 'derive_candidate(source_)' "$root/src/adapter.cpp" >/dev/null ||
   fail 'public candidate projection does not verify retained source binding'
+[ "$(grep -F -c 'ref: v3.0.1' "$root/.github/workflows/ci.yml")" -eq 2 ] ||
+  fail 'hosted matrices do not both use current libpkgsource 3.0.1'
 grep -F 'ref: v0.3.1' "$root/.github/workflows/ci.yml" >/dev/null ||
   fail 'hosted qualification does not use current libpkgplan 0.3.1 owner'
 grep -F 'tests/installed/consumer.cpp' "$root/.github/workflows/ci.yml" >/dev/null ||
   fail 'installed qualification does not exercise the real adapter consumer'
-grep -F 'ref: v0.4.0' "$root/.github/workflows/ci.yml" >/dev/null ||
-  fail 'hosted planner closure does not use libpkgimage 0.4.0'
+grep -F 'ref: v0.4.1' "$root/.github/workflows/ci.yml" >/dev/null ||
+  fail 'hosted planner closure does not use libpkgimage 0.4.1'
 grep -F 'project_candidate(source_fixture::make_snapshot())' \
   "$root/tests/installed/consumer.cpp" >/dev/null ||
   fail 'installed consumer does not call the real source-to-plan adapter'

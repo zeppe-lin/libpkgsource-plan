@@ -1,4 +1,4 @@
-# History
+# libpkgsource-plan history
 
 ## 1.1.0
 

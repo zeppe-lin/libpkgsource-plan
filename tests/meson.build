@@ -117,6 +117,8 @@ if get_option('tests').enabled()
     ['test-layout', 'check_test_layout.sh', [meson.project_source_root()]],
     ['metadata', 'metadata_test.sh', [meson.project_build_root(), meson.project_version()]],
     ['documentation-contract', 'check_documentation_contract.sh', [meson.project_source_root()]],
+    ['documentation-source', 'check_documentation_source.sh', [meson.project_source_root()]],
+    ['repository-contract', 'check_repository_contract.sh', [meson.project_source_root()]],
     ['documentation-install-contract', 'check_documentation_install_contract.sh', [meson.project_source_root()]],
     ['html-docs-contract', 'check_html_docs_contract.sh', [meson.project_source_root()]],
     ['style-contract', 'check_style_contract.sh', [meson.project_source_root(), meson.project_build_root()]],

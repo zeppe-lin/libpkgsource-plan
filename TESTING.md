@@ -1,4 +1,4 @@
-# Testing
+# Testing libpkgsource-plan
 
 ## Unit projection behavior
 

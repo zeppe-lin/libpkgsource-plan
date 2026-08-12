@@ -15,7 +15,7 @@ fail()
 
 for file in \
   index.html \
-  architecture.html \
+  design.html \
   abi.html \
   manual/pkgsource_plan_adapter.3.html \
   protocols/candidate-control-identity-v1.html \

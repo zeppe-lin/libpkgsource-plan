@@ -21,10 +21,10 @@ require_heading()
 
 for document in \
   README.md \
-  docs/architecture.md \
+  DESIGN.md \
   docs/abi.md \
   docs/protocols/candidate-control-identity-v1.md \
-  docs/testing.md \
+  TESTING.md \
   docs/code-style.md \
   docs/manpage-markdown.md \
   docs/html.md \
@@ -41,24 +41,24 @@ require_heading "$root/README.md" '## Projection'
 require_heading "$root/README.md" '## Public API'
 require_heading "$root/README.md" '## Installed documentation'
 require_heading "$root/README.md" '## HTML documentation'
-require_heading "$root/docs/architecture.md" '## Authority boundary'
+require_heading "$root/DESIGN.md" '## Authority boundary'
 require_heading "$root/docs/abi.md" '## Canonical manifest'
 require_heading "$root/docs/abi.md" '## Versioning'
 require_heading "$root/docs/abi.md" '## Qualification'
-require_heading "$root/docs/architecture.md" '## Projection map'
-require_heading "$root/docs/architecture.md" '## Installed documentation'
-require_heading "$root/docs/architecture.md" '## HTML publication boundary'
-require_heading "$root/docs/architecture.md" '## Repository layout'
-require_heading "$root/docs/architecture.md" '## Projection pipeline'
-require_heading "$root/docs/architecture.md" '## SHA-256 provider boundary'
-require_heading "$root/docs/architecture.md" '## Excluded source authority'
-require_heading "$root/docs/architecture.md" '## Failure model'
+require_heading "$root/DESIGN.md" '## Projection map'
+require_heading "$root/DESIGN.md" '## Installed documentation'
+require_heading "$root/DESIGN.md" '## HTML publication boundary'
+require_heading "$root/DESIGN.md" '## Repository layout'
+require_heading "$root/DESIGN.md" '## Projection pipeline'
+require_heading "$root/DESIGN.md" '## SHA-256 provider boundary'
+require_heading "$root/DESIGN.md" '## Excluded source authority'
+require_heading "$root/DESIGN.md" '## Failure model'
 require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Canonical record'
 require_heading "$root/docs/protocols/candidate-control-identity-v1.md" '## Fixed vector'
-require_heading "$root/docs/testing.md" '## Unit projection behavior'
-require_heading "$root/docs/testing.md" '## Integration seams'
-require_heading "$root/docs/testing.md" '## Protocol and mechanism behavior'
-require_heading "$root/docs/testing.md" '## Release qualification'
+require_heading "$root/TESTING.md" '## Unit projection behavior'
+require_heading "$root/TESTING.md" '## Integration seams'
+require_heading "$root/TESTING.md" '## Protocol and mechanism behavior'
+require_heading "$root/TESTING.md" '## Release qualification'
 require_heading "$root/docs/manpage-markdown.md" '## Conversion contract'
 require_heading "$root/docs/manpage-markdown.md" '## Forbidden Markdown'
 require_heading "$root/docs/html.md" '## Output layout'
@@ -70,7 +70,7 @@ require_heading "$root/MAINTAINING.md" '## Release checklist'
 require_heading "$root/HISTORY.md" '## 1.1.0'
 require_heading "$root/HISTORY.md" '## 1.0.0'
 
-for file in "$root/README.md" "$root/docs/architecture.md" \
+for file in "$root/README.md" "$root/DESIGN.md" \
             "$root/docs/history/in-tree-adapter-migration.md" "$root/docs/man/pkgsource_plan_adapter.3.md"; do
   grep -F '<libpkgsource-plan/libpkgsource-plan.h>' "$file" >/dev/null ||
     fail "${file#$root/} omits the umbrella include"
@@ -86,7 +86,12 @@ grep -F '2064db1e0c8a2934b1998aae9cd289cf' \
   "$root/docs/protocols/candidate-control-identity-v1.md" >/dev/null ||
   fail 'identity specification omits the fixed vector'
 
-for retired in DESIGN.md CODESTYLE.md TESTING.md MANPAGE-MARKDOWN.md \
+for duplicate in docs/architecture.md docs/testing.md
+do
+  [ ! -e "$root/$duplicate" ] || fail "duplicate documentation authority remains: $duplicate"
+done
+
+for retired in CODESTYLE.md MANPAGE-MARKDOWN.md \
                CANDIDATE-CONTROL-IDENTITY-1.md MIGRATION.md
 do
   [ ! -e "$root/$retired" ] ||
