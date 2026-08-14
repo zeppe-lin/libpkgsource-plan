@@ -75,7 +75,7 @@ libpkgsource_plan = library(
   gnu_symbol_visibility: 'hidden',
   install: true,
   version: meson.project_version(),
-  soversion: '1',
+  soversion: '2',
 )
 
 libpkgsource_plan_dep = declare_dependency(

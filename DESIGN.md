@@ -196,11 +196,11 @@ The adapter performs no retry, provider fallback, or policy substitution.
 
 ## Dependencies and ABI
 
-The public API depends on `libpkgsource >= 3.0.0` and `libpkgplan >= 0.3.1`.
+The public API depends on `libpkgsource >= 4.0.0, < 5.0.0` and `libpkgplan >= 0.3.1`.
 The selected SHA-256 provider is a private implementation dependency. With the
 current provider, generated pkg-config metadata records `libcrypto` privately.
 
-The first public shared-library ABI is `libpkgsource-plan.so.1`. Symbols are
+The source-4 carrier release publishes `libpkgsource-plan.so.2`. The first public shared-library ABI was `libpkgsource-plan.so.1`. Symbols are
 hidden by default and the linker map publishes only the
 `pkgsource::plan_adapter` ABI under `LIBPKGSOURCE_PLAN_1.0`. Private source
 layout, helper symbols, standard-library instantiations, and provider

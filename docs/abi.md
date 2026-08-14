@@ -27,8 +27,12 @@ review.
 
 ## Versioning
 
-Version 1.0.0 publishes one SONAME generation and one exact symbol set. It does
-not publish a named GNU symbol-version node. A named node is introduced only
+Version 1.0.0 publishes `libpkgsource-plan.so.1` and one exact symbol set.
+Version 2.0.0 publishes `libpkgsource-plan.so.2` with the same adapter-owned
+export set because the public API takes and retains `pkgsource::source_snapshot`
+by value and therefore must not claim binary compatibility across the
+libpkgsource 3 -> 4 carrier generation. It does not publish a named GNU
+symbol-version node. A named node is introduced only
 when the project has a concrete compatible-extension policy that requires more
 than SONAME and exact export control.
 

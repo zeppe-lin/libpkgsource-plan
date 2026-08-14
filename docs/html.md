@@ -15,7 +15,7 @@ reconstructing API documentation.
 An enabled build produces:
 
 ```text
-build/docs/html/libpkgsource-plan/1.1.0/
+build/docs/html/libpkgsource-plan/2.0.0/
 ├── index.html
 ├── design.html
 ├── abi.html
@@ -53,7 +53,7 @@ No network resource is required to render the generated tree.
 When HTML generation is enabled, normal installation places the tree under:
 
 ```text
-share/htmldocs/libpkgsource-plan/1.1.0
+share/htmldocs/libpkgsource-plan/2.0.0
 ```
 
 The install script uses Meson's `MESON_INSTALL_DESTDIR_PREFIX`, so package

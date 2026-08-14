@@ -1,5 +1,17 @@
 # libpkgsource-plan history
 
+## 2.0.0
+
+Source-4 carrier closure release.
+
+- Require `libpkgsource >= 4.0.0, < 5.0.0`.
+- Publish `libpkgsource-plan.so.2` because `candidate_projection` takes and
+  retains complete `pkgsource::source_snapshot` authority by value across the
+  source-owner ABI generation change.
+- Preserve candidate-control identity v1 and the reviewed adapter symbol set;
+  the SONAME transition closes foreign carrier authority rather than inventing
+  a new projection protocol.
+
 ## 1.1.0
 
 Testing-foundation hardening release.

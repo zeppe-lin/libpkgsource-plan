@@ -65,5 +65,5 @@ Canonical project documentation is installed under
 
 Set `-Dhtml_docs=enabled` to generate a self-contained documentation tree from
 project Markdown and public Doxygen declarations. The versioned artifact installs
-under `share/htmldocs/libpkgsource-plan/1.1.0` and is suitable for direct static
+under `share/htmldocs/libpkgsource-plan/2.0.0` and is suitable for direct static
 publication.

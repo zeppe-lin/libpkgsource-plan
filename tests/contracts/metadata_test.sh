@@ -66,7 +66,7 @@ grep -F "Version: $project_version" "$metadata" >/dev/null ||
 [ "$(field_count Requires.private)" -eq 1 ] ||
   fail 'expected exactly one Requires.private field'
 
-expect_count Requires libpkgsource 1
+expect_count Requires libpkgsource 2 # >= X, and < Y
 expect_count Requires libpkgplan 1
 expect_count Requires libcrypto 0
 expect_count Requires.private libpkgsource 0
@@ -74,9 +74,9 @@ expect_count Requires.private libpkgplan 0
 expect_count Requires.private libcrypto 1
 
 grep -E \
-  'Requires:.*libpkgsource[[:space:]]*>=[[:space:]]*3\.0\.0' \
+  'Requires:.*libpkgsource[[:space:]]*>=[[:space:]]*4\.0\.0' \
   "$metadata" >/dev/null ||
-  fail 'public libpkgsource floor is not 3.0.0'
+  fail 'public libpkgsource floor is not 4.0.0'
 grep -E \
   'Requires:.*libpkgplan[[:space:]]*>=[[:space:]]*0\.3\.1' \
   "$metadata" >/dev/null ||

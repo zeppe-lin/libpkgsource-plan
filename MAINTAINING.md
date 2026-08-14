@@ -4,7 +4,10 @@
 
 `libpkgsource-plan` has an independent project version and SONAME. Release only
 against verified `libpkgsource` and `libpkgplan` boundaries. Record exact tags or
-commits in qualification notes.
+commits in qualification notes. `candidate_projection` retains
+`pkgsource::source_snapshot` by value, so a libpkgsource ABI-generation change
+requires a fresh SONAME decision here; source 4 is admitted only by the
+`libpkgsource-plan.so.2` generation.
 
 ## Candidate-control identity
 

@@ -67,6 +67,7 @@ require_heading "$root/docs/html.md" '## Site publication'
 require_heading "$root/docs/history/in-tree-adapter-migration.md" '## No compatibility layer'
 require_heading "$root/CONTRIBUTING.md" '## Boundary first'
 require_heading "$root/MAINTAINING.md" '## Release checklist'
+require_heading "$root/HISTORY.md" '## 2.0.0'
 require_heading "$root/HISTORY.md" '## 1.1.0'
 require_heading "$root/HISTORY.md" '## 1.0.0'
 
